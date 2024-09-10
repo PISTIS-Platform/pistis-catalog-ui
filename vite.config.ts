@@ -13,12 +13,12 @@ const isSymlink = (pkg: string) => {
   }
 }
 
-let buildMode;
-if (process.env.NODE_ENV === 'production') {
-  buildMode = process.env.BUILD_MODE === 'test' ? 'test' : 'build';
-} else {
-  buildMode = 'dev';
-}
+const buildMode = process.env.NODE_ENV === 'production'
+  ? process.env.BUILD_MODE === 'test' 
+  ? 'test'
+  : 'build'
+  : 'dev';
+
 
 const buildConfig = {
   BASE_PATH: config[buildMode].assetsPublicPath,
