@@ -42,4 +42,4 @@ jobs:
               file: ./Dockerfile
               platforms: linux/amd64
               push: true
-              tags: ${{ steps.meta.outputs.tags }}
+              tags: registry.pistis-market.eu/pistis/pistis-catalog-ui:latest
