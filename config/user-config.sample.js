@@ -65,7 +65,7 @@ const glueConfig = {
   },
   routing: {
     routerOptions: {
-      base: '/',
+      base: '/srv/catalog',
       mode: 'history',
     },
     navigation: {
