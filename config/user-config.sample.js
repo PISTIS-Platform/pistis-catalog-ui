@@ -2,9 +2,11 @@ import i18n from './i18n';
 
 const glueConfig = {
   api: {
-    // baseUrl: 'https://data.europa.eu/api/hub/search/',
+    baseUrl: 'https://data.europa.eu/api/hub/search/',
     // baseUrl: 'https://ppe.data.europa.eu/api/hub/search/',
-    baseUrl: 'https://piveau-hub-search-piveau.apps.osc.fokus.fraunhofer.de/',
+    // baseUrl: 'https://piveau-hub-search-piveau.apps.osc.fokus.fraunhofer.de/',
+
+    enrichmentUrl: 'https://develop.pistis-market.eu/srv/enrichment-ui',
 
     // hubUrl: 'https://data.europa.eu/api/hub/repo/',
     // hubUrl: 'https://ppe.data.europa.eu/api/hub/repo/',

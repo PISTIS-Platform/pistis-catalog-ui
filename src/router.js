@@ -27,6 +27,7 @@ import {
   UserCataloguesPage,
   decode,
 } from "@piveau/piveau-hub-ui-modules";
+import ECDatasetDetails from './components/ECDatasetDetails.vue'
 
 const title = GLUE_CONFIG.metadata.title;
 
@@ -50,7 +51,7 @@ const router = Router.createRouter({
     },
     {
       path: '/datasets/:ds_id',
-      component: DatasetDetails,
+      component: ECDatasetDetails,
       children: [
         {
           path: '',
