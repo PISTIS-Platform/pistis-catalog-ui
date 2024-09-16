@@ -29,6 +29,8 @@ import {
 } from "@piveau/piveau-hub-ui-modules";
 import ECDatasetDetails from './components/ECDatasetDetails.vue'
 
+import DistributedQuery from './components/DistributedQuery.vue';
+
 const title = GLUE_CONFIG.metadata.title;
 
 const router = Router.createRouter({
@@ -134,6 +136,11 @@ const router = Router.createRouter({
       path: '/sparql',
       name: 'SparqlSearch',
       component: SparqlSearch,
+    },
+    {
+      path: '/distributed-query',
+      name: 'DistributedQuery',
+      component: DistributedQuery,
     },
   ]
 });
