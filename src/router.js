@@ -27,7 +27,6 @@ import {
   UserCataloguesPage,
   decode,
 } from "@piveau/piveau-hub-ui-modules";
-import ECDatasetDetails from './components/ECDatasetDetails.vue'
 
 import DistributedQuery from './components/DistributedQuery.vue';
 
@@ -53,7 +52,7 @@ const router = Router.createRouter({
     },
     {
       path: '/datasets/:ds_id',
-      component: ECDatasetDetails,
+      component: DatasetDetails,
       children: [
         {
           path: '',

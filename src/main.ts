@@ -71,6 +71,9 @@ import './styles/styles.scss';
 import 'leaflet/dist/leaflet.css';
 import '@fortawesome/fontawesome-free/css/all.css';
 
+// import ECDatasetDetailsFeatures from './components/ECDatasetDetailsFeatures.vue';
+import ECDatasetDetailsDescription from './components/ECDatasetDetailsDescription'
+
 $(() => {
   $('[data-toggle="popover"]').popover({ container: 'body' });
   $('[data-toggle="tooltip"]').tooltip({ container: 'body' });
@@ -87,6 +90,10 @@ app.use(runtimeConfigurationService, runtimeConfig, { baseConfig: GLUE_CONFIG, d
 const env = app.config.globalProperties.$env;
 
 configureModules(app, store, {
+  components:{
+    // DatasetDetailsFeatures:ECDatasetDetailsFeatures,
+    DatasetDetailsDescription:ECDatasetDetailsDescription
+  },
   serviceParams: {
     baseUrl: env.api.baseUrl,
     qualityBaseUrl: env.api.qualityBaseUrl,
