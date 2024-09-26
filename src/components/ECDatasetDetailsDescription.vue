@@ -3,7 +3,7 @@
     <section class="container custom_nav_container">
         <div class="btn_holder">
             <a :href="`${enrichmentUrl}?datasetId=${datasetId}`" target='_blank' class="link">Data Enrichment
-                &#8599;</a>
+                </a>
             <a :href="`/`" target='_blank' class="link">Data Lineage</a>
             <a :href="`/`" target='_blank' class="link">Quality Assessment</a>
             <a :href="`/`" target='_blank' class="link">Delete Dataset</a>
