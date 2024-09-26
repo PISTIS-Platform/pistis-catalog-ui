@@ -4,9 +4,9 @@
         <div class="btn_holder">
             <a :href="`${enrichmentUrl}?datasetId=${datasetId}`" target='_blank' class="link">Data Enrichment
                 &#8599;</a>
-            <a :href="`/`" target='_blank' class="link">Data Lineage &#8599;</a>
-            <a :href="`/`" target='_blank' class="link">Quality Assessment &#8599;</a>
-            <a :href="`/`" target='_blank' class="link">Delete Dataset &#8599;</a>
+            <a :href="`/`" target='_blank' class="link">Data Lineage</a>
+            <a :href="`/`" target='_blank' class="link">Quality Assessment</a>
+            <a :href="`/`" target='_blank' class="link">Delete Dataset</a>
         </div>
     </section>  
 </template>
