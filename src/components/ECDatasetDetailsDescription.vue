@@ -4,8 +4,8 @@
         <div class="btn_holder">
             <a :href="`${enrichmentUrl}?datasetId=${datasetId}`" target='_blank' class="link">Data Enrichment
                 </a>
-            <a :href="`/`" target='_blank' class="link">Data Lineage</a>
-            <a :href="`/`" target='_blank' class="link">Quality Assessment</a>
+            <a :href="`${dataLineageUrl}`" target='_blank' class="link">Data Lineage</a>
+            <a :href="`${qualityAssessmentUrl}`" target='_blank' class="link">Quality Assessment</a>
             <a :href="`/`" target='_blank' class="link">Delete Dataset</a>
         </div>
     </section>  
@@ -22,6 +22,8 @@ const ENV = useRuntimeEnv();
 let datasetId = route.params.ds_id.toString();
 
 const enrichmentUrl = ENV.api.enrichmentUrl;
+const dataLineageUrl = ENV.api.dataLineageUrl;
+const qualityAssessmentUrl = ENV.api.qualityAssessmentUrl;
 
 </script>
 

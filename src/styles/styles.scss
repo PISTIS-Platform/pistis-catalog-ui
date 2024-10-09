@@ -639,6 +639,14 @@
   word-break: break-all;
 }
 
+.distribution-content-tr{
+  display: flex;
+  flex-direction: column;
+  td{
+    width: 100% !important
+  }
+}
+
 
 // import empty theme after styles are loaded 
 @import "empty_theme";

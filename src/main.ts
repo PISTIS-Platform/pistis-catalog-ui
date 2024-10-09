@@ -73,6 +73,7 @@ import '@fortawesome/fontawesome-free/css/all.css';
 
 // import ECDatasetDetailsFeatures from './components/ECDatasetDetailsFeatures.vue';
 import ECDatasetDetailsDescription from './components/ECDatasetDetailsDescription'
+import ECDistribution from './components/ECDistribution.vue';
 
 $(() => {
   $('[data-toggle="popover"]').popover({ container: 'body' });
@@ -92,7 +93,8 @@ const env = app.config.globalProperties.$env;
 configureModules(app, store, {
   components:{
     // DatasetDetailsFeatures:ECDatasetDetailsFeatures,
-    DatasetDetailsDescription:ECDatasetDetailsDescription
+    DatasetDetailsDescription:ECDatasetDetailsDescription,
+    Distribution:ECDistribution
   },
   serviceParams: {
     baseUrl: env.api.baseUrl,
