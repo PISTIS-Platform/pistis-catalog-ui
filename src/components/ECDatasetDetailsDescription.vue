@@ -2,10 +2,18 @@
     <DatasetDetailsDescription></DatasetDetailsDescription>
     <section class="container custom_nav_container">
         <div class="btn_holder">
+            <a :href="`${enrichmentUrl}?datasetId=${datasetId}`" target='_blank' class="link">Buy
+                </a>
+            <a :href="`${dataLineageUrl}`" target='_blank' class="link">Delete</a>
+        </div>
+    </section>  
+    <section class="container custom_nav_container">
+        <div class="btn_holder">
             <a :href="`${enrichmentUrl}?datasetId=${datasetId}`" target='_blank' class="link">Data Enrichment
                 </a>
             <a :href="`${dataLineageUrl}`" target='_blank' class="link">Data Lineage</a>
             <a :href="`${qualityAssessmentUrl}`" target='_blank' class="link">Quality Assessment</a>
+            <a :href="`/`" target='_blank' class="link">Asset Data Bundler</a>
             <a :href="`/`" target='_blank' class="link">Delete Dataset</a>
         </div>
     </section>  
@@ -37,14 +45,14 @@ const qualityAssessmentUrl = ENV.api.qualityAssessmentUrl;
         gap: 1.5rem;
 
         .link {
-            /* text-decoration: underline; */
-            /* color: #18181b; */
-            /* border-bottom: 2px solid #5632d0 !important; */
+        
             background-color: #705df7;
             color: #fff;
             
             padding: .45rem;
             border-radius: .35rem;
+            min-width: 72px;
+            text-align: center;
 
             &:hover {
                 text-decoration: none;
