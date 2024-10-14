@@ -54,20 +54,15 @@ export default {
       this.loading = true;
       this.datasets = [];
       try {
-        const response = await fetch('https://pistis-market.eu/srv/distributed-query/search', {
+        const response = await fetch('http://localhost:5001/search', {
           method: 'POST',
           body: JSON.stringify({dataQuery: this.query}),
           headers: { 'Content-Type': 'application/json' }
         });
         const data = await response.json();
-        this.uuids = data.datasets;
-
-        const datasetPromises = this.uuids.map(uuid =>
-          fetch('https://develop.pistis-market.eu/srv/search/dataset/' + uuid)
-            .then(res => res.json())
-        );
-
-        this.datasets = await Promise.all(datasetPromises);
+        if(data.success) {
+          this.datasets = data.datasets;
+        }
       }
       catch (error) {
         console.error('Error fetching resources:', error);
