@@ -21,7 +21,8 @@ export default {
     "fileUploadUrl": "$VITE_API_FILE_UPLOAD_URL",
     "sparqlUrl": "$VITE_API_SPARQL_URL",
     "gazetteerBaseUrl": "$VITE_API_GAZETTEER_BASE_URL",
-    "corsproxyApiUrl": "$VITE_API_CORSPROXY_API_URL"
+    "corsproxyApiUrl": "$VITE_API_CORSPROXY_API_URL",
+    "pistisMode": "$VITE_API_PISTIS_MODE"
   },
   "authentication": {
     "useService": "$VITE_AUTHENTICATION_USE_SERVICE",

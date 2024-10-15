@@ -32,6 +32,7 @@ const glueConfig = {
     sparqlUrl: 'https://data.europa.eu/sparql',
     gazetteerBaseUrl: 'https://data.europa.eu/api/hub/search/gazetteer/',
     corsproxyApiUrl: 'https://piveau-corsproxy-piveau.apps.osc.fokus.fraunhofer.de',
+    pistisMode:'cloud'
   },
   authentication: {
     useService: true,

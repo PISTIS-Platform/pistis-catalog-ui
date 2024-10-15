@@ -5,7 +5,7 @@
         <template #additional-actions>
             <div class="add-btns">
                 <button class="btn">Anonymize</button>
-                <button class="btn">Delete</button>
+                <!-- <button class="btn">Delete</button> -->
             </div>
         </template>
 
