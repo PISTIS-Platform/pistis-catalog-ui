@@ -1,18 +1,33 @@
 <template>
 
-    <Distribution v-bind="$attrs">
+    <Distribution :class="`${pistisMode==='cloud' ? 'distributions__item-hidden' : ''}`" v-bind="$attrs">
 
         <template #additional-actions>
+            
             <div class="add-btns">
+                <a class="btn" :href="`${enrichmentUrl}?datasetId=${datasetId}&distributionId=${$attrs.distribution.id}`" target='_blank'>Data Enrichment</a>
                 <button class="btn">Anonymize</button>
-                <!-- <button class="btn">Delete</button> -->
+               
             </div>
         </template>
 
     </Distribution>
 </template>
 <script setup>
-import { Distribution, DistributionActions } from '@piveau/piveau-hub-ui-modules';
+import { Distribution, DistributionActions, useRuntimeEnv } from '@piveau/piveau-hub-ui-modules';
+import { useRoute } from 'vue-router';
+
+
+const ENV = useRuntimeEnv()
+const route = useRoute()
+
+const pistisMode = ENV.api.pistisMode
+
+const enrichmentUrl = ENV.api.enrichmentUrl
+
+
+let datasetId = route.params.ds_id.toString();
+
 </script>
 
 <style>
@@ -32,6 +47,12 @@ import { Distribution, DistributionActions } from '@piveau/piveau-hub-ui-modules
         display: flex;
         flex-direction: row;
         
+    }
+}
+
+.distributions__item-hidden{
+    .add-btns, .distribution-actions{
+        display: none !important;
     }
 }
 

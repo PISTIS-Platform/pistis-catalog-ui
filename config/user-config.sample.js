@@ -8,7 +8,7 @@ const glueConfig = {
 
     enrichmentUrl: 'https://develop.pistis-market.eu/srv/enrichment-ui',
     dataLineageUrl:'https://develop.pistis-market.eu/srv/lt-ui/',
-    qualityAssessmentUrl:'https://develop.pistis-market.eu/srv/mqa/',
+    qualityAssessmentUrl:'https://develop.pistis-market.eu/srv/catalog/datasets',
 
     // hubUrl: 'https://data.europa.eu/api/hub/repo/',
     // hubUrl: 'https://ppe.data.europa.eu/api/hub/repo/',
