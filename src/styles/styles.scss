@@ -634,6 +634,17 @@
   }
 }
 
+@media screen and (max-width:876px) {
+  .distributions__item{
+    flex-direction: column !important;
+    align-items: center;
+    display: flex !important;
+  }
+  .distribution-details{
+    max-width: 85% !important;
+  }
+}
+
 .distribution-details{
   max-width: 60%;
   word-break: break-all;
@@ -641,7 +652,7 @@
 
 .distribution-content-tr{
   display: flex;
-  flex-direction: column;
+
   td{
     width: 100% !important
   }

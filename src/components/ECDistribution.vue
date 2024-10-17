@@ -1,16 +1,11 @@
 <template>
-
     <Distribution :class="`${pistisMode==='cloud' ? 'distributions__item-hidden' : ''}`" v-bind="$attrs">
-
         <template #additional-actions>
-            
             <div class="add-btns">
                 <a class="btn" :href="`${enrichmentUrl}?datasetId=${datasetId}&distributionId=${$attrs.distribution.id}`" target='_blank'>Data Enrichment</a>
                 <button class="btn">Anonymize</button>
-               
             </div>
         </template>
-
     </Distribution>
 </template>
 <script setup>
@@ -31,25 +26,6 @@ let datasetId = route.params.ds_id.toString();
 </script>
 
 <style>
-@media screen and (max-width:768px) {
-
-}
-@media screen and (max-width:1200px) {
-
-    .add-btns,
-    .distribution-actions {
-        display: flex;
-        gap: .5rem;
-        width: 50%;
-    }
-
-    .add-btns {
-        display: flex;
-        flex-direction: row;
-        
-    }
-}
-
 .distributions__item-hidden{
     .add-btns, .distribution-actions{
         display: none !important;
@@ -59,22 +35,35 @@ let datasetId = route.params.ds_id.toString();
 .add-btns {
     display: flex;
     gap: .7rem;
+    flex-direction: column !important;
     align-items: flex-start;
     justify-content: flex-start;
     padding-top: .4rem;
-    margin: 0 .5rem;
+    width: 100%;
+}
 
+.actions-container{
+    margin-left: 1rem;
+    padding-top: 0 !important;
+    width: 25%;
 }
 
 .distribution-actions {
     display: flex;
+    align-items: flex-start;
+    padding-left: 0;
+    flex-direction: column !important;
+    justify-content: flex-start !important;
     padding-right: 0 !important;
     border: 0 !important;
-    gap: .7rem
+    gap: .7rem;
+    margin-top:0 !important
+    
 }
 
 .distribution-action {
     margin-right: 0 !important;
+    margin-left: 0 !important;
 }
 
 
@@ -90,5 +79,41 @@ let datasetId = route.params.ds_id.toString();
     margin-top: 0;
     margin-left: 0;
     min-height: 33px;
+}
+
+@media screen and (max-width:1200px) {
+    .actions-container{
+        width: 30%;
+    }
+    .add-btns,
+    .distribution-actions {
+        display: flex;
+        gap: .5rem;
+        width: 100%;
+    }
+
+    .add-btns {
+        display: flex;
+        flex-direction: row;   
+    }
+}
+
+@media screen and (max-width:876px) {
+    .actions-container{
+        width: 100%;
+        margin-left: 0 !important;
+        margin: .5rem;
+    }
+    .add-btns, .distribution-actions{
+        width: 100% !important;
+        .btn, .distribution-action{
+            width: 100%;
+            text-align: center !important;
+            display: flex;
+            align-items: center;
+            justify-content: center !important
+        }
+       
+    }
 }
 </style>
