@@ -648,11 +648,15 @@
 .distribution-details{
   max-width: 60%;
   word-break: break-all;
+
+  div{
+    flex: 0 0 100% !important;
+    max-width: 100%;
+  }
 }
 
 .distribution-content-tr{
   display: flex;
-
   td{
     width: 100% !important
   }

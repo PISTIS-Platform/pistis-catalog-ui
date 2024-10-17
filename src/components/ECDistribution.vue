@@ -36,36 +36,23 @@ let datasetId = route.params.ds_id.toString();
     display: flex;
     gap: .7rem;
     flex-direction: column !important;
-    align-items: flex-start;
     justify-content: flex-start;
     padding-top: .4rem;
     width: 100%;
-}
-
-.actions-container{
-    margin-left: 1rem;
-    padding-top: 0 !important;
-    width: 25%;
+    align-items: center;
 }
 
 .distribution-actions {
     display: flex;
-    align-items: flex-start;
     padding-left: 0;
     flex-direction: column !important;
     justify-content: flex-start !important;
     padding-right: 0 !important;
     border: 0 !important;
     gap: .7rem;
-    margin-top:0 !important
-    
+    margin-top:0 !important;
+    align-items: center;
 }
-
-.distribution-action {
-    margin-right: 0 !important;
-    margin-left: 0 !important;
-}
-
 
 .add-btns .btn {
     background-color: #705df7 !important;
@@ -79,7 +66,27 @@ let datasetId = route.params.ds_id.toString();
     margin-top: 0;
     margin-left: 0;
     min-height: 33px;
+    align-self: center;
 }
+
+.actions-container{
+    margin-left: 1rem;
+    padding-top: 0 !important;
+    width: 25%;
+
+    .distribution-action, .btn{
+        width: 150px;
+        display: flex;
+    }
+}
+
+
+
+.distribution-action {
+    margin-right: 0 !important;
+    margin-left: 0 !important;
+}
+
 
 @media screen and (max-width:1200px) {
     .actions-container{
