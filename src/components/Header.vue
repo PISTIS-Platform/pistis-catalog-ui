@@ -1,218 +1,164 @@
 <template>
-  <div class="mb-0">
-    <nav id="piveau-header" class="navbar navbar-expand-lg navbar-dark bg-primary fixed-top">
-      <slot name="logo">
-        <a class="navbar-brand" href="/"><img src="../assets/img/PISTIS_logo_white.png" height="40"></a>
-      </slot>
-      <button class="navbar-toggler" type="button" data-toggle="collapse" data-target="#navbarNav"
-        aria-controls="navbarNav" aria-expanded="false" aria-label="Toggle navigation">
-        <span class="navbar-toggler-icon"></span>
-      </button>
-      <div class="collapse navbar-collapse" id="navbarNav">
-        <div class="d-flex justify-content-between w-100">
-          <ul class="navbar-nav ml-2">
-            <li v-for="(navItem, i) in navItems" :key="`navItem@${i}`" class="nav-item px-3">
-              <slot name="nav-item" v-bind:nav-item="navItem">
-                <component v-if="navItem.to && navItem.show === true" :is="isNuxt ? 'nuxt-link' : 'router-link'"
-                  :to="navItem.to" class="nav-link" active-class="router-link-active">
-                  {{ navItem.title }}
-                </component>
-                <a v-else-if="navItem.show === true" :href="navItem.href" class="nav-link">
-                  {{ navItem.title }}
-                </a>
+  <div class="mb-0 navbar-container">
+      <nav id="piveau-header" class="navbar fixed-top">
+          <div class="left-point">
+              <slot name="logo">
+                  <a class="navbar-brand" href="/"><img src="../assets/img/PISTIS_logo_white.png" height="30"></a>
               </slot>
-            </li>
-          </ul>
-          <div class="ml-5 flex-row ml-md-auto d-md-flex" role="navigation">
-            <slot name="right">
-              <!--Auth button-->
-              <!-- <ul v-if="enableAuthentication" class="navbar-nav">
-                <li
-                  class="nav-item"
-                >
-                  <button class="btn btn-link text-light" @click="$emit(authenticated ? 'logout' : 'login')">
-                    <font-awesome-icon icon="user" /> {{ authenticated ? $t('message.header.subnav.logout') : $t('message.header.subnav.login') }}
-                  </button>
-                </li>
-              </ul> -->
-              <!-- Language box -->
-              <div v-if="useLanguageSelector">
-                <div class="input-group">
-                  <language-selector :languageObject="languageObject"
-                    :override-locale="overrideLocale"></language-selector>
-                </div>
-              </div>
-            </slot>
+              <ul
+                  :class="`${navEnabled ? 'link-container link-container-open' : 'link-container link-container-closed'}`">
+                  <li class="nav-link"><a href="https://develop.pistis-market.eu/home">Home</a></li>
+                  <!-- <li class="nav-link"><a href="/compare">Compare</a></li> -->
+                  <li class="nav-link"><a href="https://develop.pistis-market.eu/data">Data Ingestion</a></li>
+                  <li :class="`${pistisMode==='factory'?'router-link-active':''}`" class="nav-link"><a href="https://develop.pistis-market.eu/srv/catalog/datasets?locale=en">My Data</a></li>
+                  <li :class="`${pistisMode==='cloud'?'router-link-active':''}`" class="nav-link"><a href="https://pistis-market.eu/srv/catalog/datasets?locale=en">Marketplace</a></li>
+                  <li class="nav-link"><a href="https://develop.pistis-market.eu/market">Market Insights</a></li>
+              </ul>
+
+              <!-- <div class="right-point">
+              <font-awesome-icon class="bell" :icon="['fas', 'bell']"></font-awesome-icon>
+              <span class="sign-out">
+                  <font-awesome-icon :icon="['fas', 'fa-bell']" class="user"></font-awesome-icon>
+                  <font-awesome-icon :icon="['fas', 'fa-bell']" class="arrow"></font-awesome-icon>
+              </span>
+          </div> -->
+
           </div>
-        </div>
-      </div>
-    </nav>
-    <!-- <ul class="sub-nav navbar navbar-expand-lg bg-transparent">
-      <li class="active">RSS Feed</li>
-      <li>ATOM Feed</li>
-    </ul> -->
+
+
+          <button @click="toggleNav"  class="toggler" type="button">
+              <span v-if="navEnabled">&#x2715;</span>
+              <span v-else>&#8801;</span>
+          </button>
+      </nav>
   </div>
 </template>
 
-<script>
-import { FontAwesomeIcon } from '@fortawesome/vue-fontawesome';
-import Logo from './Logo.vue';
-import LanguageSelector from './LanguageSelector.vue';
+<script setup>
+import { ref } from 'vue'
+import { useRuntimeEnv } from '@piveau/piveau-hub-ui-modules';
 
-export default {
-  name: 'Piveau-Header',
-  data() {
-    return {
-      isNuxt: false,
-    };
-  },
-  components: {
-    Logo,
-    LanguageSelector,
-    FontAwesomeIcon,
-  },
-  props: {
-    project: {
-      type: String,
-      default: 'hub',
-    },
-    locale: {
-      type: String,
-      default: 'en',
-    },
-    useLanguageSelector: {
-      type: Boolean,
-      default: true,
-    },
-    navItemsHook: {
-      type: Function,
-      default: (navItems) => navItems,
-    },
-    showDatasets: {
-      type: Boolean,
-      default: true,
-    },
-    showCatalogues: {
-      type: Boolean,
-      default: true,
-    },
-    showSparql: {
-      type: Boolean,
-      default: false,
-    },
-    showMetadataQuality: {
-      type: Boolean,
-      default: true,
-    },
-    hrefDatasets: {
-      type: String,
-      default: undefined,
-    },
-    hrefCatalogues: {
-      type: String,
-      default: undefined,
-    },
-    hrefSparql: {
-      type: String,
-      default: undefined,
-    },
-    hrefMetadataQuality: {
-      type: String,
-      default: undefined,
-    },
-    languageObject: {
-      type: Array,
-      default() {
-        return []
-      }
-    },
-    headerBackground: {
-      default: 'linear-gradient(0deg, rgba(0,154,165,1) 0%, rgba(26,52,113,1) 100%)',
-    },
-    overrideLocale: {
-      type: String,
-      default: '',
-    },
-    enableAuthentication: {
-      type: Boolean,
-      default: false,
-    },
-    authenticated: {
-      type: Boolean,
-      default: false,
-    },
-  },
-  computed: {
-    navItems() {
-      const navItems = [
-        /** ToDo add route to landing? Add/change weblate translation */
-        {
-          title: this.$t('message.header.navigation.data.datasets'),
-          href: this.hrefDatasets || `/data/datasets?locale=${this.$route.query.locale}`,
-          show: this.showDatasets,
-        },
-        {
-          title: this.$t('message.header.navigation.data.catalogs'),
-          href: this.hrefCatalogues || `/data/catalogues?locale=${this.$route.query.locale}`,
-          show: this.showCatalogues,
-        },
-        {
-          title: this.$t('message.header.navigation.data.sparqlsearch'),
-          href: this.hrefSparql || '/sparql',
-          show: this.showSparql,
-        },
-        /* {
-          title: this.$t('message.header.navigation.data.metadataquality'),
-          href: this.hrefMetadataQuality || `/mqa?locale=${this.$route.query.locale}`,
-          show: this.showMetadataQuality,
-        }, */
-      ];
+const ENV = useRuntimeEnv()
 
-      this.adjustNavItemsToProject(navItems, this.project);
+const pistisMode = ENV.api.pistisMode
+console.log(pistisMode);
 
-      return this.navItemsHook(navItems);
-    },
-  },
-  created() {
-    // Check if we are in Nuxt by checking nuxt-only properties in vm
-    // https://nuxtjs.org/docs/concepts/context-helpers/#nuxt-the-nuxt-helper
-    this.isNuxt = !!this.$nuxt;
-  },
-  methods: {
-    adjustNavItemsToProject(navItems, project) {
-      const navigationItems = navItems;
-      switch (project) {
-        case 'hub':
-          if (!this.hrefDatasets) {
-            navigationItems[0].to = { name: 'Datasets', query: { locale: this.$route.query.locale } };
-          }
-          if (!this.hrefCatalogues) {
-            navigationItems[1].to = { name: 'Catalogues', query: { locale: this.$route.query.locale } };
-          }
-          if (!this.hrefSparql) {
-            navigationItems[2].to = { name: 'SparqlEdit', query: { locale: this.$route.query.locale } };
-          }
-          break;
-        case 'metrics':
-          if (!this.hrefMetadataQuality) {
-            navigationItems[3].to = { name: 'Dashboard', query: { locale: this.$route.query.locale } };
-          }
-          break;
-        default:
-          break;
-      }
-    },
-  },
-};
+// reactive state
+const navEnabled = ref(false)
+
+// functions that mutate state and trigger updates
+function toggleNav() {
+  navEnabled.value = !navEnabled.value
+}
+
+
+
 
 </script>
 
 <style lang="scss" scoped>
 // @import '../styles/_variables.scss';
-@import '../styles/custom_theme.scss';
+.navbar-container{
+  background: #5632d0 !important;
+}
 
 .navbar {
-  background: #5632d0 !important;
+  
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  position: relative;
+  .toggler {
+      color: #fff !important;
+      background-color: transparent;
+      font-size: 2rem;
+      padding: 0;
+      margin-right: 1rem;
+      border: none;
+      position: absolute;
+      top: .3rem;
+      right: .8rem
+  }
+
+  .right-point {
+      display: flex;
+      justify-content: space-between;
+      width: 100%;
+      gap: 1rem;
+      align-items: center;
+      font-size: 1.2rem;
+      margin-right: 0.2rem;
+
+      &-closed{
+          display: none;
+      }
+
+      .bell {
+          color:#c5c8ff;
+          border: 1px solid transparent;
+          border-radius: 100%;
+          padding: .5rem .6rem;
+          cursor: pointer;
+          transition: .5s;
+
+          &:hover{
+              color: #fff;
+              border:1px solid #fff
+          }
+      }
+
+      .sign-out {
+          display: flex;
+          gap:1rem;
+          align-items: center;
+          .user{
+              background-color: #c5c8ff;
+              padding: .6rem .7rem;
+              cursor: pointer;
+              border-radius: 100%;
+              color: #71717a;   
+          }
+          .arrow{
+              color: #a2a4ff;
+              font-size: .8rem;
+          }
+      }
+  }
+
+
+  .left-point {
+      display: flex;
+      flex-direction: column;
+      align-items: flex-start;
+      
+
+      .link-container {
+          padding: .4rem;
+          display: flex;
+          flex-direction: column;
+          margin: 0;
+          gap: 1rem;
+          .nav-link{
+              font-size: 1rem !important;
+          }
+
+          &-closed {
+              display: none;
+          }
+      }
+
+      // .link-container-closed {
+
+      // }
+
+      // .link-container-open {
+      //     display: flex;
+      //     padding: .4rem;
+      //     flex-direction: column;
+      //     margin: 0;
+      //     gap: 1rem;
+      // }
+  }
 }
 
 #piveau-header {
@@ -229,10 +175,18 @@ export default {
 .nav-link {
   color: #fff !important;
   font-weight: 500;
+  cursor: pointer;
+  padding: .5rem .75rem !important;
+
+  a{
+      text-decoration: none;
+      color: #fff;
+      font-weight: 500;
+  }
 
   &:hover {
-    background-color: #613debbf !important;
-    border-radius: 0.375rem;
+      background-color: #613debbf !important;
+      border-radius: 0.375rem;
   }
 }
 
@@ -244,7 +198,7 @@ export default {
   padding: .5rem .75rem !important;
 
   &:hover {
-    color: rgba(250, 250, 250, 0.9) !important;
+      color: rgba(250, 250, 250, 0.9) !important;
   }
 }
 
@@ -264,18 +218,58 @@ export default {
   border-bottom: .1px solid #d4d4d8;
 
   li {
-    padding-bottom: .8rem;
-    border-bottom: 2px solid transparent;
+      padding-bottom: .8rem;
+      border-bottom: 2px solid transparent;
   }
 
   li:hover {
-    border-bottom: 2px solid #613deb;
-    cursor: pointer;
+      border-bottom: 2px solid #613deb;
+      cursor: pointer;
   }
 
   .active {
-    border-bottom: 2px solid #613deb;
+      border-bottom: 2px solid #613deb;
   }
 }
 
+@media screen and (min-width: 667px) {
+  .navbar-container{
+  display: flex;
+  justify-content: center;
+  background: #5632d0 !important;
+}
+  .navbar {
+  width: 98%;
+      .toggler {
+          display: none;
+      }
+
+      .left-point {
+          flex-direction: row;
+          justify-content: center;
+          align-items: center;
+        
+
+          .link-container {
+              flex-direction: row;
+              margin-left: 1rem;
+              font-size: 1rem;
+          }
+
+          .link-container-closed {
+              flex-direction: row !important;
+              display: flex !important;
+          }
+      }
+  }
+
+  .right-point {
+      margin-right: 3rem;
+      width: auto !important;
+      &-closed{
+          display: flex !important;
+      }
+  }
+
+}
 </style>

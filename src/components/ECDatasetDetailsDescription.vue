@@ -3,8 +3,7 @@
     <div v-if="pistisMode === 'cloud'">
         <section class="container custom_nav_container">
             <div class="btn_holder">
-                <a :href="`${enrichmentUrl}?datasetId=${datasetId}`" target='_blank' class="link">Buy
-                </a>
+                <a :href="`${enrichmentUrl}?datasetId=${datasetId}`" target='_blank' class="link">Buy</a>
                 <a :href="`/`" target='_blank' class="link">Provide Feedback</a>
                 <!-- <a :href="`${dataLineageUrl}`" target='_blank' class="link">Delete</a> -->
             </div>
@@ -14,8 +13,9 @@
         <section class="container custom_nav_container">
             <div class="btn_holder">
                 <!-- <a :href="`${enrichmentUrl}?datasetId=${datasetId}`" target='_blank' class="link">Data Enrichment</a> -->
-                <a :href="`${dataLineageUrl}`" target='_blank' class="link">Data Lineage</a>
-                <a :href="`${qualityAssessmentUrl}/${datasetId}/quality`" target='_blank' class="link">Quality Assessment</a>
+                <a :href="`${dataLineageUrl}/${distributionID}`" target='_blank' class="link">Data Lineage</a>
+                <a :href="`${qualityAssessmentUrl}/${datasetId}/quality`" target='_blank' class="link">Quality
+                    Assessment</a>
                 <a :href="`/`" target='_blank' class="link">Register in Marketplace</a>
                 <a :href="`/`" target='_blank' class="link">Provide Feedback</a>
                 <!-- <a :href="`/`" target='_blank' class="link">Delete Dataset</a> -->
@@ -30,6 +30,9 @@
 import { DatasetDetailsDescription, DatasetDetails } from '@piveau/piveau-hub-ui-modules';
 import { useRoute } from 'vue-router';
 import { useRuntimeEnv } from '@piveau/piveau-hub-ui-modules';
+import { onMounted, ref } from 'vue';
+
+const distributionID = ref(null)
 
 const route = useRoute();
 const ENV = useRuntimeEnv();
@@ -40,7 +43,21 @@ const enrichmentUrl = ENV.api.enrichmentUrl;
 const dataLineageUrl = ENV.api.dataLineageUrl;
 const qualityAssessmentUrl = ENV.api.qualityAssessmentUrl;
 
-const pistisMode = ENV.api.pistisMode
+const pistisMode = ENV.api.pistisMode;
+
+
+
+const fetchDistributionID = async () => {
+    const data = await fetch(`https://develop.pistis-market.eu/srv/repo/datasets/${datasetId}/distributions`)
+    const response = await data.json()
+
+    const parts = response[0].split('/');
+    distributionID.value = parts[parts.length - 1];
+}
+
+onMounted(() => {
+    fetchDistributionID()
+})
 
 </script>
 

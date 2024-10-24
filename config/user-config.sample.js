@@ -106,7 +106,7 @@ const glueConfig = {
         MAX_FACET_LIMIT: 50,
         FACET_OPERATORS: Object.freeze({ or: 'OR', and: 'AND' }),
         FACET_GROUP_OPERATORS: Object.freeze({ or: 'OR', and: 'AND' }),
-        defaultFacetOrder: ['publisher', 'format', 'catalog', 'categories', 'keywords', 'dataScope', 'country', 'dataServices', 'scoring', 'license'],
+        defaultFacetOrder: ['catalog', 'publisher', 'format', 'categories', 'keywords', 'dataScope', 'country', 'dataServices', 'scoring', 'license'],
         scoringFacets: {
           useScoringFacets: true, // TODO: Make use of this property #2764
           defaultScoringFacets: {

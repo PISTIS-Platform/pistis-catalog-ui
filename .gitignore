@@ -6,6 +6,8 @@ storage
 config/*.env.js
 config/user-config.js
 
+components/HeaderDump.vue
+
 tests/unit/coverage
 tests/e2e/reports
 tests/e2e/screenshots
