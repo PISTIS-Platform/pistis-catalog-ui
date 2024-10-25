@@ -3,7 +3,7 @@
     <div v-if="pistisMode === 'cloud'">
         <section class="container custom_nav_container">
             <div class="btn_holder">
-                <a :href="`${enrichmentUrl}?datasetId=${datasetId}`" target='_blank' class="link">Buy</a>
+                <a :href="'#'" @click.prevent="buyRequest" class="link">Buy</a>
                 <a :href="`/usage-analytics/${datasetId}/questionnaire`" target='_blank' class="link">Provide Feedback</a>
                 <!-- <a :href="`${dataLineageUrl}`" target='_blank' class="link">Delete</a> -->
             </div>
@@ -31,8 +31,11 @@ import { DatasetDetailsDescription, DatasetDetails } from '@piveau/piveau-hub-ui
 import { useRoute } from 'vue-router';
 import { useRuntimeEnv } from '@piveau/piveau-hub-ui-modules';
 import { onMounted, ref } from 'vue';
+import axios from 'axios';
+
 
 const distributionID = ref(null)
+const metadata = ref({})
 
 const route = useRoute();
 const ENV = useRuntimeEnv();
@@ -50,13 +53,48 @@ const pistisMode = ENV.api.pistisMode;
 const fetchDistributionID = async () => {
     const data = await fetch(`https://develop.pistis-market.eu/srv/repo/datasets/${datasetId}/distributions`)
     const response = await data.json()
+    // console.log('response', response)
 
     const parts = response[0].split('/');
     distributionID.value = parts[parts.length - 1];
 }
 
+// TODO: remove additional call, get metadata from the call that already exists
+const fetchDistributionMetadata = async () => {
+  try {
+    const response = await axios.get(`https://develop.pistis-market.eu/srv/search/datasets/${datasetId}`);
+    console.log('response', response)
+    metadata.value = response.data
+  } catch (error) {
+    console.error("Error fetching distribution ID:", error);
+  }
+};
+
+const buyRequest = async () => {
+  try {
+    // TODO: link as ENV variable, and add the access token once keycloak is intigrated
+    const response = await axios.post('https://develop.pistis-market.eu/srv/smart-contract-execution-engine/api/scee/storePurchase',  { 
+        // The request body object
+        assetId: datasetId,
+        assetFactory: metadata.result?.monetization?.publisher?.organization_id,
+        sellerId: metadata.result?.monetization?.sellerId,
+        price: metadata.result?.monetization?.price,
+      },
+    //   {
+        // headers: {
+        //   Authorization: `Bearer ${token}`,
+        //   'Content-Type': 'application/json',
+        // },
+    //   }
+    );
+  } catch (error) {
+    console.error("Error submitting data:", error);
+  }
+};
+
 onMounted(() => {
     fetchDistributionID()
+    fetchDistributionMetadata()
 })
 
 </script>
