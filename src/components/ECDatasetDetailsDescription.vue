@@ -4,7 +4,7 @@
         <section class="container custom_nav_container">
             <div class="btn_holder">
                 <a :href="`${enrichmentUrl}?datasetId=${datasetId}`" target='_blank' class="link">Buy</a>
-                <a :href="`/`" target='_blank' class="link">Provide Feedback</a>
+                <a :href="`/usage-analytics/${datasetId}/questionnaire`" target='_blank' class="link">Provide Feedback</a>
                 <!-- <a :href="`${dataLineageUrl}`" target='_blank' class="link">Delete</a> -->
             </div>
         </section>
@@ -16,8 +16,8 @@
                 <a :href="`${dataLineageUrl}/${distributionID}`" target='_blank' class="link">Data Lineage</a>
                 <a :href="`${qualityAssessmentUrl}/${datasetId}/quality`" target='_blank' class="link">Quality
                     Assessment</a>
-                <a :href="`/`" target='_blank' class="link">Register in Marketplace</a>
-                <a :href="`/`" target='_blank' class="link">Provide Feedback</a>
+                <a :href="`/data/publish-data/${datasetId}`" target='_blank' class="link">Register in Marketplace</a>
+                <a :href="`/usage-analytics/${datasetId}/questionnaire`" target='_blank' class="link">Provide Feedback</a>
                 <!-- <a :href="`/`" target='_blank' class="link">Delete Dataset</a> -->
             </div>
         </section>
