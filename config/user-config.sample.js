@@ -25,6 +25,7 @@ const glueConfig = {
     pistisMode:'cloud'
   },
   authentication: {
+    userToken: '',
     useService: true,
     login: {
       useLogin: true,

@@ -23,6 +23,7 @@
      trackerUrl: 'http://localhost/'
    },
    authentication: {
+    userToken: '',
     useService: true,
     keycloak: {
       realm: 'piveau',
