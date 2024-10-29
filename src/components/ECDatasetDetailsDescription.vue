@@ -45,11 +45,13 @@ let datasetId = route.params.ds_id.toString();
 const enrichmentUrl = ENV.api.enrichmentUrl;
 const dataLineageUrl = ENV.api.dataLineageUrl;
 const qualityAssessmentUrl = ENV.api.qualityAssessmentUrl;
+const searchUrl= ENV.api.baseUrl
+const hubUrl = ENV.api.hubUrl
 const pistisMode = ENV.api.pistisMode;
 const token = ENV.authentication.userToken;
 
 const fetchDistributionID = async () => {
-    const data = await fetch(`https://develop.pistis-market.eu/srv/repo/datasets/${datasetId}/distributions`)
+    const data = await fetch(`${hubUrl}datasets/${datasetId}/distributions`)
     const response = await data.json()
     // console.log('response', response)
 
@@ -60,7 +62,7 @@ const fetchDistributionID = async () => {
 // TODO: remove additional call, get metadata from the call that already exists
 const fetchDistributionMetadata = async () => {
   try {
-    const response = await axios.get(`https://develop.pistis-market.eu/srv/search/datasets/${datasetId}`);
+    const response = await axios.get(`${searchUrl}datasets/${datasetId}`);
     console.log('response', response)
     metadata.value = response.data
   } catch (error) {
@@ -71,7 +73,7 @@ const fetchDistributionMetadata = async () => {
 const buyRequest = async () => {
   try {
     // TODO: link as ENV variable, and add the access token once keycloak is intigrated
-    const response = await axios.post('https://sph.pistis-market.eu/srv/smart-contract-execution-engine/api/scee/storePurchase',  { 
+    const response = await axios.post('https://sph.pistis-market.eu/srv/smart-contract-execution-engine/api/scee/storePurchase',  {
         // The request body object
         assetId: datasetId,
         assetFactory: metadata.result?.monetization[0]?.publisher?.organization_id,
