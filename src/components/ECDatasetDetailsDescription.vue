@@ -45,10 +45,8 @@ let datasetId = route.params.ds_id.toString();
 const enrichmentUrl = ENV.api.enrichmentUrl;
 const dataLineageUrl = ENV.api.dataLineageUrl;
 const qualityAssessmentUrl = ENV.api.qualityAssessmentUrl;
-
 const pistisMode = ENV.api.pistisMode;
-
-
+const token = ENV.authentication.userToken;
 
 const fetchDistributionID = async () => {
     const data = await fetch(`https://develop.pistis-market.eu/srv/repo/datasets/${datasetId}/distributions`)
@@ -73,19 +71,19 @@ const fetchDistributionMetadata = async () => {
 const buyRequest = async () => {
   try {
     // TODO: link as ENV variable, and add the access token once keycloak is intigrated
-    const response = await axios.post('https://develop.pistis-market.eu/srv/smart-contract-execution-engine/api/scee/storePurchase',  { 
+    const response = await axios.post('https://sph.pistis-market.eu/srv/smart-contract-execution-engine/api/scee/storePurchase',  { 
         // The request body object
         assetId: datasetId,
         assetFactory: metadata.result?.monetization?.publisher?.organization_id,
         sellerId: metadata.result?.monetization?.sellerId,
         price: metadata.result?.monetization?.price,
       },
-    //   {
-        // headers: {
-        //   Authorization: `Bearer ${token}`,
-        //   'Content-Type': 'application/json',
-        // },
-    //   }
+       {
+         headers: {
+           Authorization: `Bearer ${token}`,
+           'Content-Type': 'application/json',
+         },
+       }
     );
   } catch (error) {
     console.error("Error submitting data:", error);

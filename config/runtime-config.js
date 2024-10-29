@@ -25,6 +25,7 @@ export default {
     "pistisMode": "$VITE_API_PISTIS_MODE"
   },
   "authentication": {
+    "userToken": "$VITE_AUTHENTICATION_USER_TOKEN",
     "useService": "$VITE_AUTHENTICATION_USE_SERVICE",
     "login": {
       "useLogin": "$VITE_AUTHENTICATION_LOGIN_USE_LOGIN",
