@@ -74,9 +74,9 @@ const buyRequest = async () => {
     const response = await axios.post('https://sph.pistis-market.eu/srv/smart-contract-execution-engine/api/scee/storePurchase',  { 
         // The request body object
         assetId: datasetId,
-        assetFactory: metadata.result?.monetization?.publisher?.organization_id,
-        sellerId: metadata.result?.monetization?.sellerId,
-        price: metadata.result?.monetization?.price,
+        assetFactory: metadata.result?.monetization[0]?.publisher?.organization_id,
+        sellerId: metadata.result?.monetization[0]?.seller_id,
+        price: metadata.result?.monetization[0]?.price,
       },
        {
          headers: {
