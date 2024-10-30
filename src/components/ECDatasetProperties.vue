@@ -40,7 +40,7 @@ const filteredData = ref({
 const searchUrl = ENV.api.baseUrl
 
 const fetchMetadata = async () => {
-    const response = await axios.get(`${searchUrl}datasets/${datasetId}`);
+    const response = await fetch(`${searchUrl}datasets/${datasetId}`);
     const data = await response.json()
 
     metadata.value = data
