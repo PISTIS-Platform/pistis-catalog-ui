@@ -78,16 +78,12 @@ const fetchDistributionMetadata = async () => {
 };
 
 const buyRequest = async () => {
-  console.log(datasetId)
-  console.log("userGroupId" + metadata.value.result?.monetization[0]?.publisher?.organization_id)
-  console.log("sellerId" + metadata.value.result?.monetization[0]?.seller_id)
-  console.log("price" + metadata.value.result?.monetization[0]?.price)
   try {
     // TODO: link as ENV variable, and add the access token once keycloak is intigrated
     const response = await axios.post('https://sph.pistis-market.eu/srv/smart-contract-execution-engine/api/scee/storePurchase', {
         // The request body object
         assetId: datasetId,
-        userGroupId: metadata.value.result?.monetization[0]?.publisher?.organization_id,
+        assetFactory: metadata.value.result?.monetization[0]?.publisher?.organization_id,
         sellerId: metadata.value.result?.monetization[0]?.seller_id,
         price: metadata.value.result?.monetization[0]?.price,
       },
