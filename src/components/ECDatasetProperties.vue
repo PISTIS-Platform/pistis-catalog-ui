@@ -49,6 +49,7 @@ const fetchMetadata = async () => {
     metadata.value = data
 
     filteredData.value.offer = metadata.value.result.offer;
+    filteredData.value.insights_result = metadata.value.result.insights_result;
     filteredData.value.monetization = metadata.value.result.monetization
         .filter(item => !item.visible)
         .map(item => ({
@@ -68,8 +69,6 @@ const fetchMetadata = async () => {
             Free: item.free,
             Seller_ID: item.seller_id
         }));
-    filteredData.value.insights_result = metadata.value.result.insights_result;
-
 }
 
 onMounted(() => {
