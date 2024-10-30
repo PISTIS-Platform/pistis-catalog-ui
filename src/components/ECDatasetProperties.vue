@@ -14,7 +14,9 @@
                 </section>
                 <section v-if="filteredData.insights_result" class="metadata-section">
                     <span class="main-title">Insights Result</span>
-                    <Metadata :data="filteredData.insights_result" />
+                    <a :href="filteredData.insights_result" target="_blank" rel="noopener noreferrer">
+                        <Metadata :data="filteredData.insights_result" />
+                    </a>
                 </section>
             </div>
         </div>
@@ -47,7 +49,25 @@ const fetchMetadata = async () => {
     metadata.value = data
 
     filteredData.value.offer = metadata.value.result.offer;
-    filteredData.value.monetization = metadata.value.result.monetization;
+    filteredData.value.monetization = metadata.value.result.monetization
+        .filter(item => !item.visible)
+        .map(item => ({
+            Transferable: item.transferable,
+            Downloads: item.downloads,
+            Type: item.type,
+            Exclusive: item.is_exclusive,
+            Termination_date: item.termDate,
+            Num_resell: item.num_resell,
+            Price: item.price,
+            Personal_data_terms: item.personal_data_terms,
+            Contract_breach_days: item.contract_breach_days,
+            Publisher: item.publisher,
+            Non_renewal_days: item.non_renewal_days,
+            Num_share: item.num_share,
+            License: item.license,
+            Free: item.free,
+            Seller_ID: item.seller_id
+        }));
     filteredData.value.insights_result = metadata.value.result.insights_result;
 
 }
