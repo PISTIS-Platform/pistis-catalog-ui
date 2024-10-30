@@ -37,10 +37,10 @@ const filteredData = ref({
     monetization: null,
     insights_result: null
 });
-
+const searchUrl = ENV.api.baseUrl
 
 const fetchMetadata = async () => {
-    const response = await fetch(`https://develop.pistis-market.eu/srv/search/datasets/721d8df8-71da-49bc-9f2e-a81bccf92b38`)
+    const response = await axios.get(`${searchUrl}datasets/${datasetId}`);
     const data = await response.json()
 
     metadata.value = data
