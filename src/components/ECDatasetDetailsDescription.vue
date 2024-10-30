@@ -32,11 +32,15 @@
 
 <script setup>
 import {DatasetDetailsDescription, DatasetDetails} from '@piveau/piveau-hub-ui-modules';
+import snackbar from './modules/snackbarStore';
 import {useRoute} from 'vue-router';
 import {useRuntimeEnv} from '@piveau/piveau-hub-ui-modules';
 import {onMounted, ref} from 'vue';
 import axios from 'axios';
+import { useStore } from 'vuex'
 
+
+const store = useStore()
 
 const distributionID = ref(null)
 const metadata = ref({})
@@ -95,15 +99,17 @@ const buyRequest = async () => {
         },
       }
     );
-    await this.$store.dispatch({
+
+   /* store.dispatch({
       mutation: {type: 'snackbar/SHOW_MESSAGE'},
       state: {snackbar: {message: 'bought', variant: 'success'}}
-    });
+    });*/
   } catch (error) {
-    await this.$store.dispatch({
+    store.dispatch('showSnackbar')
+   /* store.dispatch({
       mutation: {type: 'snackbar/SHOW_MESSAGE'},
       state: {snackbar: {message: error, variant: 'error'}}
-    });
+    });*/
     console.error("Error submitting data:", error);
   }
 };
