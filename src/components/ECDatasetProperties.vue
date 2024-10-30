@@ -23,6 +23,7 @@
 
 <script setup>
 import { DatasetDetailsProperties } from '@piveau/piveau-hub-ui-modules';
+import {useRuntimeEnv} from '@piveau/piveau-hub-ui-modules';
 import { onMounted, ref } from 'vue';
 import { useRoute } from 'vue-router';
 import Metadata from './Metadata.vue';
@@ -31,7 +32,7 @@ const route = useRoute();
 
 let datasetId = route.params.ds_id.toString();
 const metadata = ref(null)
-
+const ENV = useRuntimeEnv();
 const filteredData = ref({
     offer: null,
     monetization: null,
