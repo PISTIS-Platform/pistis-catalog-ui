@@ -53,21 +53,14 @@ const fetchMetadata = async () => {
     filteredData.value.monetization = metadata.value.result.monetization
         .filter(item => !item.visible)
         .map(item => ({
-            Transferable: item.transferable,
-            Downloads: item.downloads,
-            Type: item.type,
-            Exclusive: item.is_exclusive,
-            Termination_date: item.termDate,
-            Num_resell: item.num_resell,
-            Price: item.price,
-            Personal_data_terms: item.personal_data_terms,
-            Contract_breach_days: item.contract_breach_days,
-            Publisher: item.publisher,
-            Non_renewal_days: item.non_renewal_days,
-            Num_share: item.num_share,
-            License: item.license,
-            Free: item.free,
-            Seller_ID: item.seller_id
+            "Transferable": item.transferable,
+            "Downloads": item.downloads,
+            "Type": item.type,
+            "Exclusive": item.is_exclusive,
+            "Termination Date": item.termDate,
+            "Price": item.price,
+            "Personal Data Terms": item.personal_data_terms,
+            "License": item.license ? item.license.description : null
         }));
 }
 
