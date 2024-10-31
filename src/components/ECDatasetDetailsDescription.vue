@@ -14,8 +14,7 @@
     <section class="container custom_nav_container">
       <div class="btn_holder">
         <!-- <a :href="`${enrichmentUrl}?datasetId=${datasetId}`" target='_blank' class="link">Data Enrichment</a> -->
-        <a :href="`${dataLineageUrl}/${accessID}`" target='_blank' class="link">Data
-          Lineage</a>
+        <a :href="`${dataLineageUrl}/${accessID}`" class="link">Data Lineage</a>
         <a :href="`${qualityAssessmentUrl}/${datasetId}/quality`" target='_blank' class="link">Quality
           Assessment</a>
         <a :href="`/data/publish-data/${datasetId}`" target='_blank' class="link">Register in
