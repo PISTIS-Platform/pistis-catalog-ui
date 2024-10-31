@@ -72,8 +72,6 @@ const fetchAccessID = async () => {
     const data = await fetch(`${searchUrl}datasets/${datasetId}`);
     const response = await data.json();
 
-    console.log("RESULT: ", response['result']);
-
     let accessIDFound = false;
 
     for (const distribution of response['result']['distributions']) {
