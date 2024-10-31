@@ -68,12 +68,29 @@ const fetchDistributionID = async () => {
 }
 
 const fetchAccessID = async () => {
-  const data = await fetch(`${searchUrl}datasets/${datasetId}`)
-  const response = await data.json()
-  // console.log('response', response)
+  try {
+    const data = await fetch(`${searchUrl}datasets/${datasetId}`);
+    const response = await data.json();
 
-  const parts = response['result']['distributions'][0]['access_url'][0].split('asset_uuid=');
-  accessID.value = parts[parts.length - 1];
+    console.log("RESULT: ", response['result']);
+
+    let accessIDFound = false;
+
+    for (const distribution of response['result']['distributions']) {
+      if (distribution['access_url'] && distribution['access_url'][0]) {
+        const parts = distribution['access_url'][0].split('asset_uuid=');
+        accessID.value = parts[parts.length - 1];
+        accessIDFound = true;
+        break;
+      }
+    }
+
+    if (!accessIDFound) {
+      console.log("No access_url found in distributions.");
+    }
+  } catch (error) {
+    console.error("Error fetching access ID:", error);
+  }
 }
 
 // TODO: remove additional call, get metadata from the call that already exists
