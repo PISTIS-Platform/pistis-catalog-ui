@@ -14,7 +14,7 @@
     <section class="container custom_nav_container">
       <div class="btn_holder">
         <!-- <a :href="`${enrichmentUrl}?datasetId=${datasetId}`" target='_blank' class="link">Data Enrichment</a> -->
-        <a :href="`${dataLineageUrl}/${distributionID}`" target='_blank' class="link">Data
+        <a :href="`${dataLineageUrl}/${accessID}`" target='_blank' class="link">Data
           Lineage</a>
         <a :href="`${qualityAssessmentUrl}/${datasetId}/quality`" target='_blank' class="link">Quality
           Assessment</a>
@@ -42,6 +42,7 @@ import {useStore} from 'vuex'
 const store = useStore()
 
 const distributionID = ref(null)
+const accessID = ref(null)
 const metadata = ref({})
 
 const route = useRoute();
@@ -64,6 +65,15 @@ const fetchDistributionID = async () => {
 
   const parts = response[0].split('/');
   distributionID.value = parts[parts.length - 1];
+}
+
+const fetchAccessID = async () => {
+  const data = await fetch(`${searchUrl}datasets/${datasetId}`)
+  const response = await data.json()
+  // console.log('response', response)
+
+  const parts = response['result']['distributions'][0]['access_url'][0].split('asset_uuid=');
+  accessID.value = parts[parts.length - 1];
 }
 
 // TODO: remove additional call, get metadata from the call that already exists
@@ -107,8 +117,9 @@ const buyRequest = async () => {
 };
 
 onMounted(() => {
+  fetchAccessID()
   fetchDistributionID()
-  fetchDistributionMetadata()
+  // fetchDistributionMetadata()
 })
 
 </script>
