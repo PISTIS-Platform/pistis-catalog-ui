@@ -22,6 +22,7 @@ export default {
     "sparqlUrl": "$VITE_API_SPARQL_URL",
     "gazetteerBaseUrl": "$VITE_API_GAZETTEER_BASE_URL",
     "corsproxyApiUrl": "$VITE_API_CORSPROXY_API_URL",
+    "anonymizerUrl":"$VITE_API_ANONYMIZER_URL",
     "pistisMode": "$VITE_API_PISTIS_MODE"
   },
   "authentication": {
