@@ -3,7 +3,8 @@
         <template #additional-actions>
             <div class="add-btns">
                 <a class="btn" :href="`${enrichmentUrl}?datasetId=${datasetId}&distributionId=${$attrs.distribution.id}`" target='_blank'>Data Enrichment</a>
-                <button class="btn">Anonymize</button>
+                <!-- To do: Distribution order? Using it's ID makes more sense -->
+                <a class="btn" :href="`${anonymizerUrl}?catalogueId=${datasetId}&distribution=0&language=en`" target='_blank'>Anonymize</a>
             </div>
         </template>
     </Distribution>
@@ -19,9 +20,8 @@ const route = useRoute()
 const pistisMode = ENV.api.pistisMode
 
 const enrichmentUrl = ENV.api.enrichmentUrl
-
-
 let datasetId = route.params.ds_id.toString();
+const anonymizerUrl = ENV.api.anonymizerUrl
 
 </script>
 
