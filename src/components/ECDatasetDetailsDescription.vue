@@ -126,8 +126,9 @@ const buyRequest = async () => {
         },
       }
     );
+    // TODO: first use default language and only then the fallback
     await store.dispatch('snackbar/showSnackbar', {
-      message: 'yeah, bought something',
+      message: 'Successfully purchased ${Object.values(metadata.value.result?.title)[0]}',
       variant: 'success',
     })
 
