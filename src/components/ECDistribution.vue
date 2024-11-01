@@ -19,7 +19,6 @@ const route = useRoute()
 const pistisMode = ENV.api.pistisMode
 
 const enrichmentUrl = ENV.api.enrichmentUrl
-const anonymizerFrontendUrl = ENV.api.anonymizerFrontendUrl
 let datasetId = route.params.ds_id.toString();
 
 </script>
