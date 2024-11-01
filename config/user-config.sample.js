@@ -7,7 +7,6 @@ const glueConfig = {
     enrichmentUrl: 'https://develop.pistis-market.eu/srv/enrichment-ui',
     dataLineageUrl:'https://develop.pistis-market.eu/srv/lt-ui/',
     qualityAssessmentUrl:'https://develop.pistis-market.eu/srv/catalog/datasets',
-    anonymizerUrl:'https://develop.pistis-market.eu/anonymizer',
 
     hubUrl: 'https://piveau-hub-repo-piveau.apps.osc.fokus.fraunhofer.de/',
 
