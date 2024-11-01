@@ -101,6 +101,14 @@ const fetchDistributionMetadata = async () => {
   }
 };
 
+// Rosanny: Redundant but needs to be done for the demo. Check ECDatasetProperties. TODO: Re-structure the components
+const fetchMetadata = async () => {
+    const response = await fetch(`${searchUrl}datasets/${datasetId}`);
+    const data = await response.json()
+
+    metadata.value = data
+}
+
 const buyRequest = async () => {
   try {
     // TODO: link as ENV variable, and add the access token once keycloak is intigrated
@@ -131,6 +139,7 @@ const buyRequest = async () => {
 };
 
 onMounted(() => {
+  fetchMetadata()
   fetchAccessID()
   fetchDistributionID()
   // fetchDistributionMetadata()
