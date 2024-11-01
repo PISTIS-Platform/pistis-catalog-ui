@@ -3,7 +3,6 @@
         <template #additional-actions>
             <div class="add-btns">
                 <a class="btn" :href="`${enrichmentUrl}?datasetId=${datasetId}&distributionId=${$attrs.distribution.id}`" target='_blank'>Data Enrichment</a>
-                <!-- To do: Distribution order? Using it's ID makes more sense -->
                 <a class="btn" :href="`/anonymizer?datasetId=${datasetId}&distribution=${$attrs.distribution.id}&language=en`" target='_blank'>Anonymize</a>
             </div>
         </template>
