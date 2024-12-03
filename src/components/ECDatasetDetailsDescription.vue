@@ -33,12 +33,15 @@
 import {DatasetDetailsDescription, DatasetDetails} from '@piveau/piveau-hub-ui-modules';
 import {useRoute} from 'vue-router';
 import {useRuntimeEnv} from '@piveau/piveau-hub-ui-modules';
-import {onMounted, ref} from 'vue';
+import {onMounted, ref, getCurrentInstance} from 'vue';
 import axios from 'axios';
 import {useStore} from 'vuex'
 
+const { appContext } = getCurrentInstance();
 
 const store = useStore()
+const $keycloak = appContext.config.globalProperties.$keycloak;
+
 
 const distributionID = ref(null)
 const accessID = ref(null)
@@ -55,7 +58,7 @@ const qualityAssessmentUrl = ENV.api.qualityAssessmentUrl;
 const searchUrl = ENV.api.baseUrl
 const hubUrl = ENV.api.hubUrl
 const pistisMode = ENV.api.pistisMode;
-const token = ENV.authentication.userToken;
+const token = $keycloak.token;
 
 const fetchDistributionID = async () => {
   const data = await fetch(`${hubUrl}datasets/${datasetId}/distributions`)

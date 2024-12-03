@@ -79,6 +79,12 @@ function init(config, watch, options) {
   keycloak.onReady = function (authenticated) {
     updateWatchVariables(authenticated);
     watch.ready = true;
+
+    // Redirect to login if not authenticated
+  if (!authenticated) {
+    keycloak.login();
+  }
+  
     typeof options.onReady === 'function' && options.onReady(keycloak, watch);
   };
 
