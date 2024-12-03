@@ -58,8 +58,8 @@ const qualityAssessmentUrl = ENV.api.qualityAssessmentUrl;
 const searchUrl = ENV.api.baseUrl
 const hubUrl = ENV.api.hubUrl
 const pistisMode = ENV.api.pistisMode;
-const token = ENV.authentication.userToken;
-// const token = $keycloak.token;
+// const token = ENV.authentication.userToken;
+const token = $keycloak.token;
 
 const fetchDistributionID = async () => {
   const data = await fetch(`${hubUrl}datasets/${datasetId}/distributions`)
