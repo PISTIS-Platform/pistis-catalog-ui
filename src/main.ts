@@ -107,7 +107,7 @@ configureModules(app, store, {
     hubUrl: env.api.hubUrl,
     keycloak: env.authentication.keycloak,
     rtp: env.authentication.rtp,
-    useAuthService: env.authentication.useService,
+    useAuthService: true,
     authToken: env.authentication.authToken,
     defaultScoringFacets: env.content.datasets.facets.scoringFacets.defaultScoringFacets,
   }
