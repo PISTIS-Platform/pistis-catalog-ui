@@ -8,7 +8,7 @@
       <piveau-header
         :show-catalogues="true"
         :show-metadata-quality="false"
-        :enable-authentication="authEnabled"
+        :enable-authentication="true"
         :authenticated="isAuthenticated"
         @login="login"
         @logout="logout"
@@ -20,14 +20,13 @@
           :key="`${$route.fullPath}`"
       />
       <piveau-footer
-        :enable-authentication="authEnabled"
+        :enable-authentication="true"
         :authenticated="isAuthenticated"
         @login="login"
         @logout="logout"
       >
       </piveau-footer>
     </div>
-    <dpi-menu v-if="isAuthenticated"></dpi-menu>
   </div>
 
 </template>
@@ -66,11 +65,8 @@ export default {
       'getRTPToken',
       'getKeycloak',
     ]),
-    authEnabled() {
-      return this.$env?.authentication?.useService && this.$env.authentication?.login?.useLogin;
-    },
     isAuthenticated() {
-      return this.authEnabled && this.keycloak?.authenticated;
+      return this.keycloak?.authenticated;
     }
   },
   methods: {
