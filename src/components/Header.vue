@@ -5,35 +5,30 @@
               <slot name="logo">
                   <a class="navbar-brand" href="/"><img src="../assets/img/PISTIS_logo_white.png" height="30"></a>
               </slot>
-              <div v-if="pistisMode === 'cloud'">
-                <ul :class="`${navEnabled ? 'link-container link-container-open' : 'link-container link-container-closed'}`">
-                    <li class="nav-link">
-                        <a href="./">Home</a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="./srv/catalog/datasets?locale=en">Marketplace</a>
-                    </li>
-                </ul>
-              </div>
-              <div v-if="pistisMode === 'factory'">
-                <ul :class="`${navEnabled ? 'link-container link-container-open' : 'link-container link-container-closed'}`">
+              <ul :class="`${navEnabled ? 'link-container link-container-open' : 'link-container link-container-closed'}`">
                 <li class="nav-link">
                     <a href="./">Home</a>
                 </li>
-                <li class="nav-link">
-                    <a href="./data">Data Ingestion</a>
-                </li>
-                <li class="nav-link">
-                    <a href="./srv/catalog/datasets?locale=en&catalog=my-data&page=1">My Data</a>
-                </li>
-                <li class="nav-link">
-                    <a href="https://pistis-market.eu/srv/catalog/datasets?locale=en">Marketplace</a>
-                </li>
-                <li class="nav-link">
-                    <a href="./market">Market Insights</a>
-                </li>
+                <div v-if="pistisMode === 'cloud'">
+                    <li class="nav-link">
+                        <a href="./srv/catalog/datasets?locale=en">Marketplace</a>
+                    </li>
+                </div>
+                <div v-if="pistisMode === 'factory'">
+                    <li class="nav-link">
+                        <a href="./data">Data Ingestion</a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="./srv/catalog/datasets?locale=en&catalog=my-data&page=1">My Data</a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="https://pistis-market.eu/srv/catalog/datasets?locale=en">Marketplace</a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="./market">Market Insights</a>
+                    </li>
+                </div>
               </ul>
-              </div>
           </div>
 
           <button @click="toggleNav"  class="toggler" type="button">
