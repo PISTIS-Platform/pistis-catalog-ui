@@ -7,7 +7,7 @@
               </slot>
               <ul
                   :class="`${navEnabled ? 'link-container link-container-open' : 'link-container link-container-closed'}`">
-                  <li class="nav-link"><a href="https://develop.pistis-market.eu/home">Home</a></li>
+                  <li class="nav-link"><a href="./">Home</a></li>
                   <!-- <li class="nav-link"><a href="/compare">Compare</a></li> -->
                   <li class="nav-link"><a href="https://develop.pistis-market.eu/data">Data Ingestion</a></li>
                   <li :class="`${pistisMode==='factory'?'router-link-active':''}`" class="nav-link"><a href="https://develop.pistis-market.eu/srv/catalog/datasets?locale=en">My Data</a></li>
