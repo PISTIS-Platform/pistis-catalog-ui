@@ -7,16 +7,16 @@
               </slot>
               <ul :class="`${navEnabled ? 'link-container link-container-open' : 'link-container link-container-closed'}`">
                 <li class="nav-link">
-                    <a href="./">Home</a>
+                    <a href="/home">Home</a>
                 </li>
-                <div v-if="pistisMode === 'cloud'">
+                <template v-if="pistisMode === 'cloud'">
                     <li class="nav-link">
                         <a href="./srv/catalog/datasets?locale=en">Marketplace</a>
                     </li>
-                </div>
-                <div v-if="pistisMode === 'factory'">
+                </template>
+                <template v-else-if="pistisMode === 'factory'">
                     <li class="nav-link">
-                        <a href="./data">Data Ingestion</a>
+                        <a href="/data">Data Ingestion</a>
                     </li>
                     <li class="nav-link">
                         <a href="./srv/catalog/datasets?locale=en&catalog=my-data&page=1">My Data</a>
@@ -25,9 +25,9 @@
                         <a href="https://pistis-market.eu/srv/catalog/datasets?locale=en">Marketplace</a>
                     </li>
                     <li class="nav-link">
-                        <a href="./market">Market Insights</a>
+                        <a href="/market">Market Insights</a>
                     </li>
-                </div>
+                </template>
               </ul>
           </div>
 
