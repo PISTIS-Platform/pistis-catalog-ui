@@ -9,25 +9,18 @@
                 <li class="nav-link">
                     <a href="/home">Home</a>
                 </li>
-                <template v-if="pistisMode === 'cloud'">
-                    <li class="nav-link">
-                        <a href="./srv/catalog/datasets?locale=en">Marketplace</a>
-                    </li>
-                </template>
-                <template v-else-if="pistisMode === 'factory'">
-                    <li class="nav-link">
-                        <a href="/data">Data Ingestion</a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="./srv/catalog/datasets?locale=en&catalog=my-data&page=1">My Data</a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="https://pistis-market.eu/srv/catalog/datasets?locale=en">Marketplace</a>
-                    </li>
-                    <li class="nav-link">
-                        <a href="/market">Market Insights</a>
-                    </li>
-                </template>
+                <li class="nav-link">
+                    <a href="/data">Data Ingestion</a>
+                </li>
+                <li class="nav-link">
+                    <a href="/srv/catalog/datasets?locale=en&catalog=my-data&page=1">My Data</a>
+                </li>
+                <li class="nav-link">
+                    <a href="https://pistis-market.eu/srv/catalog/datasets?locale=en">Marketplace</a>
+                </li>
+                <li class="nav-link">
+                    <a href="/market">Market Insights</a>
+                </li>
               </ul>
           </div>
 
