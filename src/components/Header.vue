@@ -1,66 +1,104 @@
 <template>
-  <div class="mb-0 navbar-container">
-      <nav id="piveau-header" class="navbar fixed-top">
-          <div class="left-point">
-              <slot name="logo">
-                  <a class="navbar-brand" href="/"><img src="../assets/img/PISTIS_logo_white.png" height="30"></a>
-              </slot>
-              <ul :class="`${navEnabled ? 'link-container link-container-open' : 'link-container link-container-closed'}`">
-                <li class="nav-link">
-                    <a href="/home">Home</a>
-                </li>
-                <li class="nav-link">
-                    <a href="/data">Data Ingestion</a>
-                </li>
-                <li class="nav-link">
-                    <a href="/srv/catalog/datasets?locale=en&catalog=my-data&page=1">My Data</a>
-                </li>
-                <li class="nav-link">
-                    <a href="https://pistis-market.eu/srv/catalog/datasets?locale=en">Marketplace</a>
-                </li>
-                <li class="nav-link">
-                    <a href="/market">Market Insights</a>
-                </li>
-              </ul>
-          </div>
+    <div class="mb-0 navbar-container">
+        <nav id="piveau-header" class="navbar fixed-top">
+            <div class="left-point">
+                <slot name="logo">
+                    <a class="navbar-brand" href="/"><img src="../assets/img/PISTIS_logo_white.png" height="30"></a>
+                </slot>
+                <ul
+                    :class="`${navEnabled ? 'link-container link-container-open' : 'link-container link-container-closed'}`">
+                    <li class="nav-link">
+                        <a :href="`https://${factoryPrefix}.pistis-market.eu`">Home</a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="/data">Data Ingestion</a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="/srv/catalog/datasets?locale=en&catalog=my-data&page=1">My Data</a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="https://pistis-market.eu/srv/catalog/datasets?locale=en">Marketplace</a>
+                    </li>
+                    <li class="nav-link">
+                        <a href="/market">Market Insights</a>
+                    </li>
+                </ul>
+            </div>
 
-          <button @click="toggleNav"  class="toggler" type="button">
-              <span v-if="navEnabled">&#x2715;</span>
-              <span v-else>&#8801;</span>
-          </button>
-      </nav>
-  </div>
+            <button @click="toggleNav" class="toggler" type="button">
+                <span v-if="navEnabled">&#x2715;</span>
+                <span v-else>&#8801;</span>
+            </button>
+        </nav>
+    </div>
 </template>
 
 <script setup>
-    import { ref } from 'vue'
-    import { useRuntimeEnv } from '@piveau/piveau-hub-ui-modules';
+import { ref, getCurrentInstance } from 'vue'
+import { useRuntimeEnv } from '@piveau/piveau-hub-ui-modules';
+const { appContext } = getCurrentInstance();
 
-    const ENV = useRuntimeEnv()
+const $keycloak = appContext.config.globalProperties.$keycloak;
 
-    const pistisMode = ENV.api.pistisMode
+const ENV = useRuntimeEnv()
 
-    // reactive state
-    const navEnabled = ref(false)
+const factoryPrefix = ref('')
 
-    // functions that mutate state and trigger updates
-    function toggleNav() {
+const token = $keycloak.token;
+const pistisMode = ENV.api.pistisMode;
+
+
+
+
+// reactive state
+const navEnabled = ref(false)
+
+// functions that mutate state and trigger updates
+function toggleNav() {
     navEnabled.value = !navEnabled.value
-    }
+}
+
+
+
+const getUserFactory = async () => {
+  try {
+    // TODO: link as ENV variable, and add the access token once keycloak is intigrated
+    const response = await axios.get('https://sph.pistis-market.eu/srv/smart-contract-execution-engine/api/scee/storePurchase', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const data = response.json()
+    factoryPrefix.value = data.factoryPrefix
+    console.log(factoryPrefix.value);
+    
+
+  } catch (error) {
+    await store.dispatch('snackbar/showError',  error)
+
+    console.error("Error getting data:", error);
+  }
+};
+
+onMounted(() => {
+   getUserFactory()
+})
 </script>
 
 <style lang="scss" scoped>
-
-    .navbar-container{
+.navbar-container {
     background: #5632d0 !important;
-    }
+}
 
-    .navbar {
-    
+.navbar {
+
     display: flex;
     align-items: center;
     justify-content: space-between;
     position: relative;
+
     .toggler {
         color: #fff !important;
         background-color: transparent;
@@ -82,36 +120,38 @@
         font-size: 1.2rem;
         margin-right: 0.2rem;
 
-        &-closed{
+        &-closed {
             display: none;
         }
 
         .bell {
-            color:#c5c8ff;
+            color: #c5c8ff;
             border: 1px solid transparent;
             border-radius: 100%;
             padding: .5rem .6rem;
             cursor: pointer;
             transition: .5s;
 
-            &:hover{
+            &:hover {
                 color: #fff;
-                border:1px solid #fff
+                border: 1px solid #fff
             }
         }
 
         .sign-out {
             display: flex;
-            gap:1rem;
+            gap: 1rem;
             align-items: center;
-            .user{
+
+            .user {
                 background-color: #c5c8ff;
                 padding: .6rem .7rem;
                 cursor: pointer;
                 border-radius: 100%;
-                color: #71717a;   
+                color: #71717a;
             }
-            .arrow{
+
+            .arrow {
                 color: #a2a4ff;
                 font-size: .8rem;
             }
@@ -123,7 +163,7 @@
         display: flex;
         flex-direction: column;
         align-items: flex-start;
-        
+
 
         .link-container {
             padding: .4rem;
@@ -131,7 +171,8 @@
             flex-direction: column;
             margin: 0;
             gap: 1rem;
-            .nav-link{
+
+            .nav-link {
                 font-size: 1rem !important;
             }
 
@@ -152,26 +193,26 @@
         //     gap: 1rem;
         // }
     }
-    }
+}
 
-    #piveau-header {
+#piveau-header {
     position: relative;
-    }
+}
 
-    .piveau-logo {
+.piveau-logo {
     max-height: 55px;
     width: auto;
     padding-top: 10px;
     padding-bottom: 10px;
-    }
+}
 
-    .nav-link {
+.nav-link {
     color: #fff !important;
     font-weight: 500;
     cursor: pointer;
     padding: .5rem .75rem !important;
 
-    a{
+    a {
         text-decoration: none;
         color: #fff;
         font-weight: 500;
@@ -181,9 +222,9 @@
         background-color: #613debbf !important;
         border-radius: 0.375rem;
     }
-    }
+}
 
-    .router-link-active {
+.router-link-active {
     color: #fff !important;
     font-size: 1rem;
     background-color: #462ba8;
@@ -193,9 +234,9 @@
     &:hover {
         color: rgba(250, 250, 250, 0.9) !important;
     }
-    }
+}
 
-    .sub-nav {
+.sub-nav {
     background-color: transparent !important;
     height: 3rem;
     display: flex;
@@ -223,16 +264,18 @@
     .active {
         border-bottom: 2px solid #613deb;
     }
+}
+
+@media screen and (min-width: 667px) {
+    .navbar-container {
+        display: flex;
+        justify-content: center;
+        background: #5632d0 !important;
     }
 
-    @media screen and (min-width: 667px) {
-    .navbar-container{
-    display: flex;
-    justify-content: center;
-    background: #5632d0 !important;
-    }
     .navbar {
-    width: 98%;
+        width: 98%;
+
         .toggler {
             display: none;
         }
@@ -241,7 +284,7 @@
             flex-direction: row;
             justify-content: center;
             align-items: center;
-            
+
 
             .link-container {
                 flex-direction: row;
@@ -259,10 +302,11 @@
     .right-point {
         margin-right: 3rem;
         width: auto !important;
-        &-closed{
+
+        &-closed {
             display: flex !important;
         }
     }
 
-    }
+}
 </style>
