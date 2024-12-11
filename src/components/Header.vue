@@ -63,7 +63,7 @@ function toggleNav() {
 const getUserFactory = async () => {
   try {
     // TODO: link as ENV variable, and add the access token once keycloak is intigrated
-    const response = await axios.get('https://sph.pistis-market.eu/srv/smart-contract-execution-engine/api/scee/storePurchase', {
+    const response = await axios.get('https://pistis-market.eu/srv/factories-registry/api/factories/user-factory', {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
@@ -76,8 +76,6 @@ const getUserFactory = async () => {
     
 
   } catch (error) {
-    await store.dispatch('snackbar/showError',  error)
-
     console.error("Error getting data:", error);
   }
 };
