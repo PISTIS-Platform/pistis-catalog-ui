@@ -34,7 +34,7 @@
 </template>
 
 <script setup>
-import { ref, getCurrentInstance } from 'vue'
+import { ref, getCurrentInstance, onMounted } from 'vue'
 import { useRuntimeEnv } from '@piveau/piveau-hub-ui-modules';
 const { appContext } = getCurrentInstance();
 
