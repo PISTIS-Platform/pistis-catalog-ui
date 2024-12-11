@@ -84,6 +84,8 @@ const getUserFactory = async () => {
 
 onMounted(() => {
    getUserFactory()
+   console.log('test message from header');
+   
 })
 </script>
 
