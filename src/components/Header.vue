@@ -11,16 +11,16 @@
                         <a :href="`https://${factoryPrefix}.pistis-market.eu`">Home</a>
                     </li>
                     <li class="nav-link">
-                        <a href="/data">Data Ingestion</a>
+                        <a :href="`https://${factoryPrefix}.pistis-market.eu/data`">Data Ingestion</a>
                     </li>
                     <li class="nav-link">
-                        <a href="/srv/catalog/datasets?locale=en&catalog=my-data&page=1">My Data</a>
+                        <a :href="`https://${factoryPrefix}.pistis-market.eu/srv/catalog/datasets?locale=en&catalog=my-data&page=1`">My Data</a>
                     </li>
                     <li class="nav-link">
                         <a href="https://pistis-market.eu/srv/catalog/datasets?locale=en">Marketplace</a>
                     </li>
                     <li class="nav-link">
-                        <a href="/market">Market Insights</a>
+                        <a :href="`https://${factoryPrefix}.pistis-market.eu/market`">Market Insights</a>
                     </li>
                 </ul>
             </div>
@@ -63,14 +63,14 @@ function toggleNav() {
 const getUserFactory = async () => {
   try {
     // TODO: link as ENV variable, and add the access token once keycloak is intigrated
-    const response = await axios.get('https://pistis-market.eu/srv/factories-registry/api/factories/user-factory', {
+    const response = await fetch('https://pistis-market.eu/srv/factories-registry/api/factories/user-factory', {
         headers: {
           Authorization: `Bearer ${token}`,
           'Content-Type': 'application/json',
         },
       }
     );
-    const data = response.json()
+    const data = await response.json()    
     factoryPrefix.value = data.factoryPrefix
     console.log(factoryPrefix.value);
     
