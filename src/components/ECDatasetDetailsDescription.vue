@@ -6,149 +6,120 @@
         <a :href="'#'" @click.prevent="buyRequest" class="link">Buy</a>
         <a :href="`/usage-analytics/${datasetId}/questionnaire`" class="link">Provide
           Feedback</a>
-        <!-- <a :href="`${dataLineageUrl}`" target='_blank' class="link">Delete</a> -->
       </div>
     </section>
   </div>
   <div v-else-if="pistisMode === 'factory'">
     <section class="container custom_nav_container">
       <div class="btn_holder">
-        <!-- <a :href="`${enrichmentUrl}?datasetId=${datasetId}`" target='_blank' class="link">Data Enrichment</a> -->
-        <a :href="`${dataLineageUrl}/${accessID}`" class="link">Data Lineage</a>
-        <a :href="`${qualityAssessmentUrl}/${datasetId}/quality`" class="link">Quality
+        <a :href="`/srv/lt-ui/${accessID}`" class="link">Data Lineage</a>
+        <a :href="`srv/catalog/datasets/${datasetId}/quality`" class="link">Quality
           Assessment</a>
         <a :href="`/data/publish-data/${datasetId}`" class="link">Register in
           Marketplace</a>
         <a :href="`/usage-analytics/${datasetId}/questionnaire`" class="link">Provide
           Feedback</a>
-        <!-- <a :href="`/`" target='_blank' class="link">Delete Dataset</a> -->
       </div>
     </section>
   </div>
-
-
 </template>
 
 <script setup>
-import {DatasetDetailsDescription, DatasetDetails} from '@piveau/piveau-hub-ui-modules';
-import {useRoute} from 'vue-router';
-import {useRuntimeEnv} from '@piveau/piveau-hub-ui-modules';
-import {onMounted, ref, getCurrentInstance} from 'vue';
-import axios from 'axios';
-import {useStore} from 'vuex'
+  import {DatasetDetailsDescription} from '@piveau/piveau-hub-ui-modules';
+  import {useRoute} from 'vue-router';
+  import {useRuntimeEnv} from '@piveau/piveau-hub-ui-modules';
+  import {onMounted, ref, getCurrentInstance} from 'vue';
+  import axios from 'axios';
+  import {useStore} from 'vuex'
 
-const { appContext } = getCurrentInstance();
+  const { appContext } = getCurrentInstance();
 
-const store = useStore()
-const $keycloak = appContext.config.globalProperties.$keycloak;
+  const store = useStore()
+  const $keycloak = appContext.config.globalProperties.$keycloak;
 
+  const distributionID = ref(null)
+  const accessID = ref(null)
+  const metadata = ref(null)
 
-const distributionID = ref(null)
-const accessID = ref(null)
-const metadata = ref({})
+  const route = useRoute();
+  const ENV = useRuntimeEnv();
 
-const route = useRoute();
-const ENV = useRuntimeEnv();
+  let datasetId = route.params.ds_id.toString();
 
-let datasetId = route.params.ds_id.toString();
+  const searchUrl = ENV.api.baseUrl
+  const pistisMode = ENV.api.pistisMode;
+  const token = $keycloak.token;
 
-const enrichmentUrl = ENV.api.enrichmentUrl;
-const dataLineageUrl = ENV.api.dataLineageUrl;
-const qualityAssessmentUrl = ENV.api.qualityAssessmentUrl;
-const searchUrl = ENV.api.baseUrl
-const hubUrl = ENV.api.hubUrl
-const pistisMode = ENV.api.pistisMode;
-// const token = ENV.authentication.userToken;
-const token = $keycloak.token;
+  const setDistributionID = async (data) => {
+    distributionID.value = data['result']['distributions'][0].id;
+  }
 
-const fetchDistributionID = async () => {
-  const data = await fetch(`${hubUrl}datasets/${datasetId}/distributions`)
-  const response = await data.json()
-  // console.log('response', response)
-
-  const parts = response[0].split('/');
-  distributionID.value = parts[parts.length - 1];
-}
-
-const fetchAccessID = async () => {
-  try {
-    const data = await fetch(`${searchUrl}datasets/${datasetId}`);
-    const response = await data.json();
-
-    let accessIDFound = false;
-
-    for (const distribution of response['result']['distributions']) {
-      if (distribution['access_url'] && distribution['access_url'][0]) {
-        const parts = distribution['access_url'][0].split('asset_uuid=');
-        accessID.value = parts[parts.length - 1];
-        accessIDFound = true;
-        break;
+  const setAccessID = async (data) => {
+    try {
+      let accessIDFound = false;
+      for (const distribution of data['result']['distributions']) {
+        if (distribution['access_url'] && distribution['access_url'][0]) {
+          const parts = distribution['access_url'][0].split('asset_uuid=');
+          accessID.value = parts[parts.length - 1];
+          accessIDFound = true;
+          break;
+        }
       }
+
+      if (!accessIDFound) {
+        console.log("No access_url found in distributions.");
+      }
+    } catch (error) {
+      console.error("Error fetching access ID:", error);
     }
+  }
 
-    if (!accessIDFound) {
-      console.log("No access_url found in distributions.");
+  const fetchMetadata = async () => {
+    try {
+      const response = await fetch(`${searchUrl}datasets/${datasetId}`);
+      const data = await response.json();
+      metadata.value = data;
+
+      setAccessID(data);
+      setDistributionID(data);
+    } catch (error) {
+      console.error("Error fetching the metadata. ERROR: ", error);
     }
-  } catch (error) {
-    console.error("Error fetching access ID:", error);
   }
-}
 
-// TODO: remove additional call, get metadata from the call that already exists
-const fetchDistributionMetadata = async () => {
-  try {
-    const response = await axios.get(`${searchUrl}datasets/${datasetId}`);
-    console.log('response', response)
-    metadata.value = response.data
-  } catch (error) {
-    console.error("Error fetching distribution ID:", error);
-  }
-};
-
-// Rosanny: Redundant but needs to be done for the demo. Check ECDatasetProperties. TODO: Re-structure the components
-const fetchMetadata = async () => {
-    const response = await fetch(`${searchUrl}datasets/${datasetId}`);
-    const data = await response.json()
-
-    metadata.value = data
-}
-
-const buyRequest = async () => {
-  try {
-    // TODO: link as ENV variable, and add the access token once keycloak is intigrated
-    const response = await axios.post('https://sph.pistis-market.eu/srv/smart-contract-execution-engine/api/scee/storePurchase', {
-        // The request body object
-        assetId: datasetId,
-        assetFactory: metadata.value.result?.monetization[0]?.publisher?.organization_id,
-        sellerId: metadata.value.result?.monetization[0]?.seller_id,
-        price: metadata.value.result?.monetization[0]?.price,
-      },
-      {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
+  const buyRequest = async () => {
+    try {
+      // TODO: link as ENV variable, and add the access token once keycloak is intigrated
+      const response = await axios.post('https://sph.pistis-market.eu/srv/smart-contract-execution-engine/api/scee/storePurchase', {
+          // The request body object
+          assetId: datasetId,
+          assetFactory: metadata.value.result?.monetization[0]?.publisher?.organization_id,
+          sellerId: metadata.value.result?.monetization[0]?.seller_id,
+          price: metadata.value.result?.monetization[0]?.price,
         },
-      }
-    );
-    // TODO: first use default language and only then the fallback
-    await store.dispatch('snackbar/showSnackbar', {
-      message: 'Successfully purchased ${Object.values(metadata.value.result?.title)[0]}',
-      variant: 'success',
-    })
+        {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      // TODO: first use default language and only then the fallback
+      await store.dispatch('snackbar/showSnackbar', {
+        message: 'Successfully purchased ${Object.values(metadata.value.result?.title)[0]}',
+        variant: 'success',
+      })
 
-  } catch (error) {
-    await store.dispatch('snackbar/showError',  error)
+    } catch (error) {
+      await store.dispatch('snackbar/showError',  error)
 
-    console.error("Error submitting data:", error);
-  }
-};
+      console.error("Error submitting data:", error);
+    }
+  };
 
-onMounted(() => {
-  fetchMetadata()
-  fetchAccessID()
-  fetchDistributionID()
-  // fetchDistributionMetadata()
-})
+  onMounted(() => {
+    fetchMetadata();
+  })
 
 </script>
 

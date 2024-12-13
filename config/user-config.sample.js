@@ -3,37 +3,25 @@ import i18n from './i18n';
 const glueConfig = {
   api: {
     baseUrl: 'https://develop.pistis-market.eu/srv/search/',
-
-    enrichmentUrl: 'https://develop.pistis-market.eu/srv/enrichment-ui',
-    dataLineageUrl:'https://develop.pistis-market.eu/srv/lt-ui/',
-    qualityAssessmentUrl:'https://develop.pistis-market.eu/srv/catalog/datasets',
-
-    hubUrl: 'https://piveau-hub-repo-piveau.apps.osc.fokus.fraunhofer.de/',
-
-    qualityBaseUrl: 'https://piveau-metrics-cache-piveau.apps.osc.fokus.fraunhofer.de/',
-
-    similarityEndpoint: 'similarities',
+    hubUrl: 'https://develop.pistis-market.eu/srv/repo/',
+    qualityBaseUrl: 'https://develop.pistis-market.eu/srv/mqa/',
+    sparqlUrl: 'https://develop.pistis-market.eu/srv/virtuoso/sparql',
+    gazetteerBaseUrl: 'https://develop.pistis-market.eu/srv/search/gazetteer/',
     similarityBaseUrl: 'https://piveau-metrics-dataset-similarities-piveau.apps.osc.fokus.fraunhofer.de/',
-
-    similarityServiceName: 'similarity',
-
+    similarityEndpoint: 'similarities',
     fileUploadUrl: 'https://piveau-hub-store-piveau.apps.osc.fokus.fraunhofer.de/',
-
-    sparqlUrl: 'https://data.europa.eu/sparql',
-    gazetteerBaseUrl: 'https://data.europa.eu/api/hub/search/gazetteer/',
     corsproxyApiUrl: 'https://piveau-corsproxy-piveau.apps.osc.fokus.fraunhofer.de',
-    pistisMode:'cloud'
+    pistisMode:'factory',
+    similarityServiceName: 'similarity'
   },
   authentication: {
     userToken: '',
     useService: true,
     login: {
       useLogin: true,
-
       loginTitle: 'Login',
       loginURL: '/login',
       loginRedirectUri: '/',
-
       logoutTitle: 'Logout',
       logoutURL: '/logout',
       logoutRedirectUri: '/',

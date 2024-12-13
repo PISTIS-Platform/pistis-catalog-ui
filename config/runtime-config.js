@@ -16,11 +16,11 @@ export default {
     "baseUrl": "$VITE_API_BASE_URL",
     "hubUrl": "$VITE_API_HUB_URL",
     "qualityBaseUrl": "$VITE_API_QUALITY_BASE_URL",
+    "sparqlUrl": "$VITE_API_SPARQL_URL",
+    "gazetteerBaseUrl": "$VITE_API_GAZETTEER_BASE_URL",
     "similarityBaseUrl": "$VITE_API_SIMILARITY_BASE_URL",
     "similarityEndpoint": "$VITE_API_SIMILARITY_ENDPOINT",
     "fileUploadUrl": "$VITE_API_FILE_UPLOAD_URL",
-    "sparqlUrl": "$VITE_API_SPARQL_URL",
-    "gazetteerBaseUrl": "$VITE_API_GAZETTEER_BASE_URL",
     "corsproxyApiUrl": "$VITE_API_CORSPROXY_API_URL",
     "pistisMode": "$VITE_API_PISTIS_MODE"
   },
