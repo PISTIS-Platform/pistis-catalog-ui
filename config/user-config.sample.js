@@ -27,11 +27,9 @@ const glueConfig = {
       logoutRedirectUri: '/',
     },
     keycloak: {
-      realm: 'vanilla',
-      clientId: 'piveau-hub-ui',
-      url: 'https://demo.piveau.io/auth',
-
-      // TODO: Do we need to include these properties? They seem to be default values that never change #2763
+      realm: 'your-realm',
+      clientId: 'your-clientId',
+      url: 'https://your.keycloak.io/auth',
       'ssl-required': 'external',
       'public-client': true,
       'verify-token-audience': true,
