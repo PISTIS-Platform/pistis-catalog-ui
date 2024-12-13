@@ -14,7 +14,7 @@
                 </section>
                 <section v-if="filteredData.insights_result" class="metadata-section">
                     <span class="main-title">Insights Result</span>
-                    <a :href="filteredData.insights_result" target="_blank" rel="noopener noreferrer">
+                    <a :href="filteredData.insights_result" rel="noopener noreferrer">
                         <Metadata :data="filteredData.insights_result" />
                     </a>
                 </section>
