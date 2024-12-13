@@ -276,7 +276,7 @@ const glueConfig = {
       },
       options: {
         id: 'mapbox/streets-v11',
-        accessToken: 'pk.eyJ1IjoiZmFiaWFwZmVsa2VybiIsImEiOiJja2x3MzlvZ3UwNG85MnBseXJ6aGI2MHdkIn0.bFs2g4bPMYULlvDSVsetJg',
+        accessToken: 'youaccesstokengoeshere',
         attribution: '&copy; <a href="https://ec.europa.eu/eurostat/web/gisco/">Eurostat - GISCO</a>',
       },
       mapStyle: {
