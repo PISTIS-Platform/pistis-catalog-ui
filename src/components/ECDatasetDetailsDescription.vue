@@ -13,7 +13,7 @@
     <section class="container custom_nav_container">
       <div class="btn_holder">
         <a :href="`/srv/lt-ui/${accessID}`" class="link">Data Lineage</a>
-        <a :href="`srv/catalog/datasets/${datasetId}/quality`" class="link">Quality
+        <a :href="`/srv/catalog/datasets/${datasetId}/quality`" class="link">Quality
           Assessment</a>
         <a :href="`/data/publish-data/${datasetId}`" class="link">Register in
           Marketplace</a>
