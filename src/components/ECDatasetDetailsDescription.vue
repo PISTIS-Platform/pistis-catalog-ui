@@ -15,8 +15,7 @@
         <a :href="`/srv/lt-ui/${accessID}`" class="link">Data Lineage</a>
         <a :href="`/srv/catalog/datasets/${datasetId}/quality`" class="link">Quality
           Assessment</a>
-        <a :href="`/data/publish-data/${datasetId}`" class="link">Register in
-          Marketplace</a>
+        <a :href="`/data/publish-data/${datasetId}`" class="link">Publish Data</a>
         <a :href="`/usage-analytics/${datasetId}/questionnaire`" class="link">Provide
           Feedback</a>
       </div>
