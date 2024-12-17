@@ -3,7 +3,9 @@
   <div v-if="pistisMode === 'cloud'">
     <section class="container custom_nav_container">
       <div class="btn_holder">
-        <a :href="'#'" @click.prevent="buyRequest" class="link">Buy</a>
+        <!-- <a :href="'#'" @click.prevent="buyRequest" class="link">Buy</a> -->
+         <a :href="`https://${factoryPrefix}.pistis-market.eu`" class="link">Buy</a>
+        
         <a :href="`/usage-analytics/${datasetId}/questionnaire`" class="link">Provide
           Feedback</a>
       </div>
@@ -48,6 +50,9 @@
   const searchUrl = ENV.api.baseUrl
   const pistisMode = ENV.api.pistisMode;
   const token = $keycloak.token;
+
+  const factoryPrefix = ref('')
+
 
   const setDistributionID = async (data) => {
     distributionID.value = data['result']['distributions'][0].id;
@@ -116,9 +121,32 @@
     }
   };
 
+  const getUserFactory = async () => {
+  try {
+    const response = await fetch('https://pistis-market.eu/srv/factories-registry/api/factories/user-factory', {
+        headers: {
+          Authorization: `Bearer ${token}`,
+          'Content-Type': 'application/json',
+        },
+      }
+    );
+    const data = await response.json()    
+    factoryPrefix.value = data.factoryPrefix
+    
+
+  } catch (error) {
+    console.error("Error getting data:", error);
+  }
+};
+
+
+
   onMounted(() => {
     fetchMetadata();
+   getUserFactory()
   })
+
+
 
 </script>
 

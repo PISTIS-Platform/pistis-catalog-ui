@@ -72,7 +72,6 @@ const getUserFactory = async () => {
     );
     const data = await response.json()    
     factoryPrefix.value = data.factoryPrefix
-    console.log(factoryPrefix.value);
     
 
   } catch (error) {
@@ -81,9 +80,7 @@ const getUserFactory = async () => {
 };
 
 onMounted(() => {
-   getUserFactory()
-   console.log('test message from header');
-   
+   getUserFactory()   
 })
 </script>
 
