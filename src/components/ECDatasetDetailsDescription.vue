@@ -4,7 +4,7 @@
     <section class="container custom_nav_container">
       <div class="btn_holder">
         <!-- <a :href="'#'" @click.prevent="buyRequest" class="link">Buy</a> -->
-         <a :href="`https://${factoryPrefix}.pistis-market.eu`" class="link">Buy</a>
+         <a :href="`https://${factoryPrefix}.pistis-market.eu`" @click.prevent="buyRequest(factoryPrefix)" class="link">Buy</a>
         
         <a :href="`/usage-analytics/${datasetId}/questionnaire`" class="link">Provide
           Feedback</a>
@@ -83,7 +83,7 @@
       const response = await fetch(`${searchUrl}datasets/${datasetId}`);
       const data = await response.json();
       metadata.value = data;
-
+      
       setAccessID(data);
       setDistributionID(data);
     } catch (error) {
@@ -91,10 +91,10 @@
     }
   }
 
-  const buyRequest = async () => {
+  const buyRequest = async (factoryPrefix) => {
     try {
       // TODO: link as ENV variable, and add the access token once keycloak is intigrated
-      const response = await axios.post('https://sph.pistis-market.eu/srv/smart-contract-execution-engine/api/scee/storePurchase', {
+      const response = await axios.post(`https://${factoryPrefix}.pistis-market.eu/srv/smart-contract-execution-engine/api/scee/storePurchase`, {
           // The request body object
           assetId: datasetId,
           assetFactory: metadata.value.result?.monetization[0]?.publisher?.organization_id,
@@ -108,6 +108,7 @@
           },
         }
       );
+      
       // TODO: first use default language and only then the fallback
       await store.dispatch('snackbar/showSnackbar', {
         message: 'Successfully purchased ${Object.values(metadata.value.result?.title)[0]}',
