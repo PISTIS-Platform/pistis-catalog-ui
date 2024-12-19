@@ -3,11 +3,8 @@
   <div v-if="pistisMode === 'cloud'">
     <section class="container custom_nav_container">
       <div class="btn_holder">
-        <!-- <a :href="'#'" @click.prevent="buyRequest" class="link">Buy</a> -->
-         <a :href="`https://${factoryPrefix}.pistis-market.eu`" @click.prevent="buyRequest(factoryPrefix)" class="link">Buy</a>
-        
-        <a :href="`/usage-analytics/${datasetId}/questionnaire`" class="link">Provide
-          Feedback</a>
+        <a :href="'#'" @click.prevent="buyRequest(factoryPrefix)" class="link">Buy</a>
+        <a :href="`/usage-analytics/${datasetId}/questionnaire`" class="link">Provide Feedback</a>
       </div>
     </section>
   </div>
@@ -15,11 +12,9 @@
     <section class="container custom_nav_container">
       <div class="btn_holder">
         <a :href="`/srv/lt-ui/${accessID}`" class="link">Data Lineage</a>
-        <a :href="`/srv/catalog/datasets/${datasetId}/quality`" class="link">Quality
-          Assessment</a>
+        <a :href="`/srv/catalog/datasets/${datasetId}/quality`" class="link">Quality Assessment</a>
         <a :href="`/data/publish-data/${datasetId}`" class="link">Publish Data</a>
-        <a :href="`/usage-analytics/${datasetId}/questionnaire`" class="link">Provide
-          Feedback</a>
+        <a :href="`/usage-analytics/${datasetId}/questionnaire`" class="link">Provide Feedback</a>
       </div>
     </section>
   </div>
@@ -47,7 +42,8 @@
 
   let datasetId = route.params.ds_id.toString();
 
-  const searchUrl = ENV.api.baseUrl
+  const searchUrl = ENV.api.baseUrl;
+  const userFactoryUrl = 'https://pistis-market.eu/srv/factories-registry/api/factories/user-factory';
   const pistisMode = ENV.api.pistisMode;
   const token = $keycloak.token;
 
@@ -114,41 +110,32 @@
         message: 'Successfully purchased ${Object.values(metadata.value.result?.title)[0]}',
         variant: 'success',
       })
-
     } catch (error) {
-      await store.dispatch('snackbar/showError',  error)
-
-      console.error("Error submitting data:", error);
+      const errorMessage = error?.response?.data?.response[0] || 'An error occurred while processing your request.';
+      await store.dispatch('snackbar/showError', errorMessage)
     }
   };
 
   const getUserFactory = async () => {
-  try {
-    const response = await fetch('https://pistis-market.eu/srv/factories-registry/api/factories/user-factory', {
-        headers: {
-          Authorization: `Bearer ${token}`,
-          'Content-Type': 'application/json',
-        },
-      }
-    );
-    const data = await response.json()    
-    factoryPrefix.value = data.factoryPrefix
-    
-
-  } catch (error) {
-    console.error("Error getting data:", error);
-  }
-};
-
-
+    try {
+      const response = await fetch(`${userFactoryUrl}`, {
+          headers: {
+            Authorization: `Bearer ${token}`,
+            'Content-Type': 'application/json',
+          },
+        }
+      );
+      const data = await response.json()    
+      factoryPrefix.value = data.factoryPrefix
+    } catch (error) {
+      console.error("Error getting data:", error);
+    }
+  };
 
   onMounted(() => {
     fetchMetadata();
-   getUserFactory()
+    getUserFactory();
   })
-
-
-
 </script>
 
 <style scoped>
