@@ -10,12 +10,19 @@
   </div>
   <div v-else-if="pistisMode === 'factory'">
     <section class="container custom_nav_container">
-      <div class="btn_holder">
-        <a :href="`/srv/lt-ui/${accessID}`" class="link">Data Lineage</a>
-        <a :href="`/srv/catalog/datasets/${datasetId}/quality`" class="link">Quality Assessment</a>
-        <a :href="`/data/publish-data/${datasetId}`" class="link">Publish Data</a>
-        <a :href="`/usage-analytics/${datasetId}/questionnaire`" class="link">Provide Feedback</a>
-      </div>
+      <template v-if="catalog === 'my-data'">
+        <div class="btn_holder">
+          <a :href="`/srv/lt-ui/${accessID}`" class="link">Data Lineage</a>
+          <a :href="`/srv/catalog/datasets/${datasetId}/quality`" class="link">Quality Assessment</a>
+          <a :href="`/data/publish-data/${datasetId}`" class="link">Publish Data</a>
+        </div>
+      </template>
+      <template v-if="catalog === 'acquired-data'">
+        <div class="btn_holder">
+          <a :href="`/srv/catalog/datasets/${datasetId}/quality`" class="link">Quality Assessment</a>
+          <a :href="`/usage-analytics/${datasetId}/questionnaire`" class="link">Provide Feedback</a>
+        </div>
+      </template>
     </section>
   </div>
 </template>
@@ -36,6 +43,7 @@
   const distributionID = ref(null)
   const accessID = ref(null)
   const metadata = ref(null)
+  const catalog = ref(null)
 
   const route = useRoute();
   const ENV = useRuntimeEnv();
@@ -48,7 +56,6 @@
   const token = $keycloak.token;
 
   const factoryPrefix = ref('')
-
 
   const setDistributionID = async (data) => {
     distributionID.value = data['result']['distributions'][0].id;
@@ -79,6 +86,7 @@
       const response = await fetch(`${searchUrl}datasets/${datasetId}`);
       const data = await response.json();
       metadata.value = data;
+      catalog.value = data.result.catalog.id;
       
       setAccessID(data);
       setDistributionID(data);

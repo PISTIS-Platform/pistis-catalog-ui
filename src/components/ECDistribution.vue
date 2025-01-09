@@ -2,6 +2,7 @@
     <Distribution :class="`${pistisMode==='cloud' ? 'distributions__item-hidden' : ''}`" v-bind="$attrs">
         <template #additional-actions>
             <div class="add-btns">
+                <!-- My Data -->
                 <a class="btn" :href="`/srv/enrichment-ui?datasetId=${datasetId}&distributionId=${$attrs.distribution.id}`">Data Enrichment</a>
                 <a class="btn" :href="`/anonymizer?datasetId=${datasetId}&distribution=${$attrs.distribution.id}&language=en`">Anonymize</a>
             </div>
