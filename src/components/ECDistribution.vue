@@ -3,6 +3,7 @@
         <template #additional-actions>
             <div class="add-btns">
                 <!-- My Data -->
+                <button class="btn" @click="downloadFile">Download</button>
                 <a class="btn" :href="`/srv/enrichment-ui?datasetId=${datasetId}&distributionId=${$attrs.distribution.id}&file_type=${$attrs.distribution.format.id}`">Data Enrichment</a>
                 <a class="btn" :href="`/anonymizer?datasetId=${datasetId}&distribution=${$attrs.distribution.id}&language=en`">Anonymize</a>
             </div>
@@ -12,15 +13,62 @@
 <script setup>
     import { Distribution, DistributionActions, useRuntimeEnv } from '@piveau/piveau-hub-ui-modules';
     import { useRoute } from 'vue-router';
+    import { useAttrs, getCurrentInstance } from 'vue';
+    import axios from 'axios';
 
+    const { appContext } = getCurrentInstance();
+
+    const $keycloak = appContext.config.globalProperties.$keycloak;
+
+    const $attrs = useAttrs();
     const ENV = useRuntimeEnv()
     const route = useRoute()
     const pistisMode = ENV.api.pistisMode
+    const props = defineProps()
 
     let datasetId = route.params.ds_id.toString();
+
+    async function downloadFile() {
+        const accessUrl = $attrs.distribution.accessUrl[0];
+        const token = $keycloak.token;
+
+        try {
+            // Make a GET request with Authorization header and responseType as 'blob'
+            const response = await axios.get(accessUrl, {
+            headers: {
+                Authorization: `Bearer ${token}`,
+            },
+            responseType: 'blob',
+            });
+
+            // Create a Blob URL
+            const url = window.URL.createObjectURL(new Blob([response.data]));
+            
+            // Create a temporary link element
+            const a = document.createElement('a');
+            a.href = url;
+
+            // Optional: Use the `content-disposition` header to extract the filename
+            const contentDisposition = response.headers['content-disposition'];
+            const fileName = contentDisposition
+            ? contentDisposition.split('filename=')[1].replace(/"/g, '')
+            : 'downloaded_file';
+
+            a.download = fileName; // Set the downloaded file name
+            document.body.appendChild(a);
+            a.click();
+
+            // Clean up
+            window.URL.revokeObjectURL(url);
+            document.body.removeChild(a);
+        } catch (error) {
+            console.error('Error downloading file:', error);
+            alert('Failed to download file.');
+        }
+    }
 </script>
 
-<style>
+<style lang="scss">
     .distributions__item-hidden{
         .add-btns, .distribution-actions{
             display: none !important;
