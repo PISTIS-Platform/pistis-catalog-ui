@@ -446,6 +446,9 @@
   }
 }
 
+.download-all-btn, .distribution-download {
+  display: none !important;
+}
 
 .dataset-info-box .dataset-info-box-body .row {
   flex-direction: column;
