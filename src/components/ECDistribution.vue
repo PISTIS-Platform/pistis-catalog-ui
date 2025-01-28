@@ -3,6 +3,7 @@
         <template #additional-actions>
             <div class="add-btns">
                 <!-- My Data -->
+                 <!-- TODO: Button inactive if no accessUrl -->
                 <button class="btn" @click="downloadFile">Download</button>
                 <a class="btn" :href="`/srv/enrichment-ui?datasetId=${datasetId}&distributionId=${$attrs.distribution.id}&file_type=${$attrs.distribution.format.id}`">Data Enrichment</a>
                 <a class="btn" :href="`/anonymizer?datasetId=${datasetId}&distribution=${$attrs.distribution.id}&language=en`">Anonymize</a>
@@ -33,7 +34,6 @@
         const token = $keycloak.token;
 
         try {
-            // Make a GET request with Authorization header and responseType as 'blob'
             const response = await axios.get(accessUrl, {
             headers: {
                 Authorization: `Bearer ${token}`,
@@ -41,20 +41,33 @@
             responseType: 'blob',
             });
 
-            // Create a Blob URL
-            const url = window.URL.createObjectURL(new Blob([response.data]));
+            const contentTypeHeader = response.headers['content-type'];
+            const contentType = contentTypeHeader.split(';')[0].trim();
             
-            // Create a temporary link element
-            const a = document.createElement('a');
-            a.href = url;
+            // Map Content-Type to file extensions
+            const mimeToExtensionMap = {
+            'text/csv': 'csv',
+            'application/json': 'json',
+            'application/pdf': 'pdf',
+            'application/vnd.openxmlformats-officedocument.spreadsheetml.sheet': 'xlsx',
+            'text/plain': 'txt',
+            };
 
-            // Optional: Use the `content-disposition` header to extract the filename
+            // Determine the file extension from Content-Type
+            const fileExtension = mimeToExtensionMap[contentType] || 'bin'; // Default to 'bin' for unknown types
+            // Determine the filename (use Content-Disposition if provided)
             const contentDisposition = response.headers['content-disposition'];
             const fileName = contentDisposition
             ? contentDisposition.split('filename=')[1].replace(/"/g, '')
-            : 'downloaded_file';
+            : `downloaded_file.${fileExtension}`; // Use default filename with detected extension
 
-            a.download = fileName; // Set the downloaded file name
+            // Create a Blob URL with the detected Content-Type
+            const url = window.URL.createObjectURL(new Blob([response.data], { type: contentType }));
+
+            // Create a temporary link and trigger download
+            const a = document.createElement('a');
+            a.href = url;
+            a.download = fileName; // Use the dynamically determined filename
             document.body.appendChild(a);
             a.click();
 
@@ -63,7 +76,7 @@
             document.body.removeChild(a);
         } catch (error) {
             console.error('Error downloading file:', error);
-            alert('Failed to download file.');
+            alert('Failed to download the file.');
         }
     }
 </script>
