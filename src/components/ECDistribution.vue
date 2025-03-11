@@ -34,16 +34,23 @@
         const token = $keycloak.token;
 
         try {
-            const response = await axios.get(accessUrl, {
+          console.log("accessUrl", accessUrl, $attrs.distribution.format.id)
+
+          const config = {
             headers: {
-                Authorization: `Bearer ${token}`,
+              Authorization: `Bearer ${token}`,
             },
             responseType: 'blob',
-            });
+          };
+          if ($attrs.distribution.format.id === "SQL") {
+            config.params = { JSON_output: "False" };
+          }
 
-            const contentTypeHeader = response.headers['content-type'];
-            const contentType = contentTypeHeader.split(';')[0].trim();
-            
+          const response = await axios.get(accessUrl, config);
+
+          const contentTypeHeader = response.headers['content-type'];
+          const contentType = contentTypeHeader.split(';')[0].trim();
+
             // Map Content-Type to file extensions
             const mimeToExtensionMap = {
             'text/csv': 'csv',
@@ -155,7 +162,7 @@
 
         .add-btns {
             display: flex;
-            flex-direction: row;   
+            flex-direction: row;
         }
     }
 
@@ -174,7 +181,7 @@
                 align-items: center;
                 justify-content: center !important
             }
-        
+
         }
     }
 </style>
