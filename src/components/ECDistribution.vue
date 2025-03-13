@@ -25,7 +25,20 @@
     const ENV = useRuntimeEnv()
     const route = useRoute()
     const pistisMode = ENV.api.pistisMode
-    const props = defineProps()
+
+    // Determine filename based on title if possible:
+    let downloadFileName = "download";
+    const titleObject = $attrs.distribution.title;
+    if (titleObject) {
+      const keys = Object.keys(titleObject);
+      if (keys) {
+        if (keys.includes("en")) {
+          downloadFileName = titleObject.en;
+        } else {
+          downloadFileName = titleObject[keys[0]];
+        }
+      }
+    }
 
     let datasetId = route.params.ds_id.toString();
 
@@ -62,11 +75,15 @@
 
             // Determine the file extension from Content-Type
             const fileExtension = mimeToExtensionMap[contentType] || 'bin'; // Default to 'bin' for unknown types
-            // Determine the filename (use Content-Disposition if provided)
-            const contentDisposition = response.headers['content-disposition'];
-            const fileName = contentDisposition
-            ? contentDisposition.split('filename=')[1].replace(/"/g, '')
-            : `downloaded_file.${fileExtension}`; // Use default filename with detected extension
+
+            // Do not do this anymore: now use the title to compose the download filename
+            //
+            // // Determine the filename (use Content-Disposition if provided)
+            // const contentDisposition = response.headers['content-disposition'];
+            // const fileName = contentDisposition
+            // ? contentDisposition.split('filename=')[1].replace(/"/g, '')
+            // : `downloaded_file.${fileExtension}`; // Use default filename with detected extension
+            const fileName = `${downloadFileName}.${fileExtension}`;
 
             // Create a Blob URL with the detected Content-Type
             const url = window.URL.createObjectURL(new Blob([response.data], { type: contentType }));
