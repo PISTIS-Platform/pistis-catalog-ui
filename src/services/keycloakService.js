@@ -1,6 +1,6 @@
 // @ts-nocheck
 /* eslint-disable */
-import { reactive } from 'vue';
+import {reactive} from 'vue';
 import Keycloak from 'keycloak-js';
 import qs from 'qs';
 import axios from 'axios';
@@ -18,7 +18,7 @@ export default {
 
     const defaultParams = {
       config: window.__BASEURL__ ? `${window.__BASEURL__}/config` : '/config',
-      init: { onLoad: 'login-required' },
+      init: {onLoad: 'login-required'},
     };
     const options = Object.assign({}, defaultParams, params);
     if (assertOptions(options).hasError) throw new Error(`Invalid options given: ${assertOptions(options).error}`);
@@ -58,21 +58,26 @@ export default {
     });
 
     getConfig(options.config)
-    .then((config) => {
-      init(config, watch, options);
-      Object.defineProperty(app.config.globalProperties, '$keycloak', {
-        get() {
-          return watch;
-        },
+      .then((config) => {
+        init(config, watch, options).then(() =>
+          Object.defineProperty(app.config.globalProperties, '$keycloak', {
+            get() {
+              return watch;
+            },
+          }))
+          .catch((err) => {
+
+          console.error("Error initing keycloak: " + err);
+        });
+      })
+      .catch((err) => {
+
+        console.error("Error installing keycloak: " + err);
       });
-    })
-    .catch((err) => {
-      console.error(err);
-    });
   },
 };
 
-function init(config, watch, options) {
+async function init(config, watch, options) {
   const ctor = sanitizeConfig(config);
   const keycloak = new Keycloak(ctor);
 
@@ -81,10 +86,10 @@ function init(config, watch, options) {
     watch.ready = true;
 
     // Redirect to login if not authenticated
-  if (!authenticated) {
-    keycloak.login();
-  }
-  
+    if (!authenticated) {
+      keycloak.login();
+    }
+
     typeof options.onReady === 'function' && options.onReady(keycloak, watch);
   };
 
@@ -92,17 +97,17 @@ function init(config, watch, options) {
     // Check token validity every 10 seconds (10 000 ms) and, if necessary, update the token.
     // Refresh token if it's valid for less then 60 seconds
     const updateTokenInterval = setInterval(() => keycloak.updateToken(60)
-    .then((hasRefreshed) => {
-      if (hasRefreshed) {
-        // When the auth token refreshes, 'invalidate' the stored rtpToken
-        // to force getting a new rtpToken the next time
+      .then((hasRefreshed) => {
+        if (hasRefreshed) {
+          // When the auth token refreshes, 'invalidate' the stored rtpToken
+          // to force getting a new rtpToken the next time
+          rtpToken = null;
+        }
+      })
+      .catch(() => {
         rtpToken = null;
-      }
-    })
-    .catch(() => {
-      rtpToken = null;
-      keycloak.clearToken();
-    }), 10000);
+        keycloak.clearToken();
+      }), 10000);
 
     watch.logoutFn = () => {
       clearInterval(updateTokenInterval);
@@ -113,14 +118,17 @@ function init(config, watch, options) {
     updateWatchVariables(true);
   };
 
-  keycloak.init(options.init)
-  .catch((err) => {
-    typeof options.onInitError === 'function' && options.onInitError(err);
-  });
+  // --- Initialize Keycloak ---
+
+  try {
+    await keycloak.init(options.init);
+  } catch (err) {
+    options.onInitError?.(err);
+  }
 
   let updateTokenTimeout = null;
 
-  function getRtpToken({ autoRefresh = false, refreshToken = null} = {}) {
+  function getRtpToken({autoRefresh = false, refreshToken = null} = {}) {
     const rtpConfig = options.config.rtp;
     const baseUrl = options.config.url;
     const realm = options.config.realm;
@@ -129,7 +137,7 @@ function init(config, watch, options) {
     const requestBody = {
       grant_type: rtpConfig.grand_type,
       audience: rtpConfig.audience,
-      ...refreshToken ? { refresh_token: refreshToken } : {},
+      ...refreshToken ? {refresh_token: refreshToken} : {},
     };
 
     return new Promise((resolve, reject) => {
@@ -150,7 +158,7 @@ function init(config, watch, options) {
         if (autoRefresh) {
           if (updateTokenTimeout) clearTimeout(updateTokenTimeout);
           updateTokenTimeout = setTimeout(async () => {
-            await getRtpToken({ autoRefresh: true, refreshToken: response.data.refresh_token });
+            await getRtpToken({autoRefresh: true, refreshToken: response.data.refresh_token});
           }, refreshInterval);
         }
         updateWatchVariables(true);
@@ -163,13 +171,13 @@ function init(config, watch, options) {
 
   function loginFn(options) {
     keycloak.login(options)
-    .then(() => {
-      store.dispatch('auth/setKeycloak', keycloak);
-      store.dispatch('auth/authLogin', keycloak.authenticated);
-    })
-    .catch((err) => {
-      console.error(`Error keycloak login: ${JSON.stringify(err)}`);
-    });
+      .then(() => {
+        store.dispatch('auth/setKeycloak', keycloak);
+        store.dispatch('auth/authLogin', keycloak.authenticated);
+      })
+      .catch((err) => {
+        console.error(`Error keycloak login: ${JSON.stringify(err)}`);
+      });
   }
 
   function logoutFn(options) {
@@ -218,16 +226,25 @@ function assertOptions(options) {
     config, init, onReady, onInitError,
   } = options;
   if (typeof config !== 'string' && !_isObject(config)) {
-    return { hasError: true, error: `'config' option must be a string or an object. Found: '${config}'` };
+    return {
+      hasError: true,
+      error: `'config' option must be a string or an object. Found: '${config}'`
+    };
   }
   if (!_isObject(init) || typeof init.onLoad !== 'string') {
-    return { hasError: true, error: `'init' option must be an object with an 'onLoad' property. Found: '${init}'` };
+    return {
+      hasError: true,
+      error: `'init' option must be an object with an 'onLoad' property. Found: '${init}'`
+    };
   }
   if (onReady && typeof onReady !== 'function') {
-    return { hasError: true, error: `'onReady' option must be a function. Found: '${onReady}'` };
+    return {hasError: true, error: `'onReady' option must be a function. Found: '${onReady}'`};
   }
   if (onInitError && typeof onInitError !== 'function') {
-    return { hasError: true, error: `'onInitError' option must be a function. Found: '${onInitError}'` };
+    return {
+      hasError: true,
+      error: `'onInitError' option must be a function. Found: '${onInitError}'`
+    };
   }
   return {
     hasError: false,
@@ -259,7 +276,7 @@ function getConfig(config) {
 }
 
 function sanitizeConfig(config) {
-  const renameProp = (oldProp, newProp, { [oldProp]: old, ...others }) => ({
+  const renameProp = (oldProp, newProp, {[oldProp]: old, ...others}) => ({
     [newProp]: old,
     ...others,
   });
