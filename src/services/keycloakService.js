@@ -67,8 +67,8 @@ export default {
           }))
           .catch((err) => {
 
-          console.error("Error initing keycloak: " + err);
-        });
+            console.error("Error initing keycloak: " + err);
+          });
       })
       .catch((err) => {
 
@@ -121,8 +121,14 @@ async function init(config, watch, options) {
   // --- Initialize Keycloak ---
 
   try {
-    await keycloak.init(options.init);
+    const inited = await keycloak.init(options.init).catch(err => {
+      console.error("Error when calling keycloak.init: " + err)
+    });
+
+    console.info("keycloak inited after calling keycloak.init: " + inited)
+
   } catch (err) {
+    console.error("Error calling keycloak.init: " + err)
     options.onInitError?.(err);
   }
 
