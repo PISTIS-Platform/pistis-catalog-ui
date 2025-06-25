@@ -79,6 +79,8 @@ export default {
 
 async function init(config, watch, options) {
   const ctor = sanitizeConfig(config);
+  console.info(ctor);
+
   const keycloak = new Keycloak(ctor);
 
   keycloak.onReady = function (authenticated) {
@@ -123,6 +125,7 @@ async function init(config, watch, options) {
   try {
     const inited = await keycloak.init(options.init).catch(err => {
       console.error("Error when calling keycloak.init: " + err)
+      options.onInitError?.(err);
     });
 
     console.info("keycloak inited after calling keycloak.init: " + inited)
