@@ -37,7 +37,7 @@ const glueConfig = {
       'confidential-port': 0,
     },
     keycloakInit: {
-      pkceMethod: '',
+      pkceMethod: 'S256',
     },
     rtp: {
       grand_type: 'urn:ietf:params:oauth:grant-type:uma-ticket',
